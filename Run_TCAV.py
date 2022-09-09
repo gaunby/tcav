@@ -27,7 +27,7 @@ activation_dir =  working_dir+ '/activations/'
 cav_dir = working_dir + '/cavs/'
 # where the images live.
 
-source_dir = '/zhome/a6/6/127219/TCAV_ImageNetData'
+source_dir = '/zhome/a6/6/127219/TCAV_ImageNetData_example'
 bottlenecks = ['mixed3a']  # @param 
       
 utils.make_dir_if_not_exists(activation_dir)

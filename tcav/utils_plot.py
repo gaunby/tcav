@@ -158,4 +158,4 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
   # ct stores current time
   import datetime;
   ct = datetime.datetime.now()
-  plt.savefig(f'SaveResults/results_{ct}.png')
+  plt.savefig(f'SavedResults/results_{ct}.png')
