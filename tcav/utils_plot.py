@@ -20,6 +20,7 @@ from __future__ import print_function
 from scipy.stats import ttest_ind
 import numpy as np
 import matplotlib.pyplot as plt
+import datetime
 
 
 # helper function to output plot and write summary data
@@ -154,8 +155,6 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
   ax.set_xticklabels(plot_concepts)
   ax.legend()
   fig.tight_layout()
-  
   # ct stores current time
-  import datetime;
   ct = datetime.datetime.now()
   plt.savefig(f'SavedResults/results_{ct}.png')

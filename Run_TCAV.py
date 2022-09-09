@@ -1,5 +1,3 @@
-
-
 ## Running TCAV
 
 # Install required libraries
