@@ -25,8 +25,8 @@ activation_dir =  working_dir+ '/activations/'
 cav_dir = working_dir + '/cavs/'
 # where the images live.
 
-source_dir = '/work3/s174498/TCAV_ImageNetData'
-bottlenecks = ['mixed3a']  # @param 
+source_dir = '/work3/s174498/ImageNet_Data'
+bottlenecks = ['mixed4a']  # @param 
       
 utils.make_dir_if_not_exists(activation_dir)
 utils.make_dir_if_not_exists(working_dir)
