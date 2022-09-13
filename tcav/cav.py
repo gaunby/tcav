@@ -45,7 +45,7 @@ class CAV(object):
         Returns:
           TF.HParams for training.
         """
-        return {"model_type": "linear", "alpha": 0.01, "max_iter": 1000, "tol": 1e-3}
+        return {"model_type": "linear", "alpha": 0.01, "max_iter": 5000, "tol": 1e-3}
 
     @staticmethod
     def load_cav(cav_path):
