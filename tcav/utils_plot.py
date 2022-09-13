@@ -94,7 +94,23 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
         
         # Calculate statistical significance
         _, p_val = ttest_ind(random_i_ups[bottleneck], i_ups)
-                  
+
+        # Plot histogram 
+        print('>>> P-val <<<\n', np.round(p_val,3))
+        print('>>> Number of TCAV concept observations <<<\n', len(i_ups))
+        print('>>> Number of TCAV random observations <<<\n', len(random_i_ups[bottleneck]))
+        plt.figure()
+        plt.hist(i_ups, 10,density=True, range = (0,1),facecolor='g', alpha=0.75, label = concept)
+        plt.hist(random_i_ups[bottleneck], 10,density=True,range = (0,1), facecolor='r', alpha=0.75, label='random')
+        plt.legend(loc='upper right')
+        plt.title(f'Histogram of {concept} (concept)\nin {bottleneck} (bottleneck)')
+        plt.ylabel('Density = True')
+        plt.xlabel('TCAV value')
+
+        # ct stores current time
+        ct = datetime.datetime.now()
+        plt.savefig(f'SavedResults/Hist_{concept}_in_{bottleneck}_{ct}.png')
+
         if bottleneck not in plot_data:
           plot_data[bottleneck] = {'bn_vals': [], 'bn_stds': [], 'significant': []}
 
@@ -132,11 +148,12 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
   index = np.arange(num_concepts) * bar_width * (num_bottlenecks + 1)
 
   # matplotlib
-  print('HEJ1')
   fig, ax = plt.subplots()
   
   # draw all bottlenecks individually
+
   for i, [bn, vals] in enumerate(plot_data.items()):
+
     bar = ax.bar(index + i * bar_width, vals['bn_vals'],
         bar_width, yerr=vals['bn_stds'], label=bn)
     
