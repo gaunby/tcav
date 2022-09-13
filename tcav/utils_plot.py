@@ -80,7 +80,7 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
   # to plot, must massage data again 
   plot_data = {}
   plot_concepts = []
-    
+
   # print concepts and classes with indentation
   for concept in result_summary:
         
@@ -94,7 +94,19 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
         
         # Calculate statistical significance
         _, p_val = ttest_ind(random_i_ups[bottleneck], i_ups)
-                  
+        
+        # Plot histogram 
+        print('>>> P-val <<<\n', np.round(p_val,3))
+        print('>>> Number of TCAV concept observations <<<\n', len(i_ups))
+        print('>>> Number of TCAV random observations <<<\n', len(random_i_ups[bottleneck]))
+        plt.hist(i_ups, 10,density=True, range = (0,1),facecolor='g', alpha=0.75, label = concept)
+        plt.hist(random_i_ups[bottleneck], 10,density=True,range = (0,1), facecolor='r', alpha=0.75, label='random')
+        plt.legend(loc='upper right')
+        plt.title(f'Histogram of {concept} (concept)\nin {bottleneck} (bottleneck)')
+        plt.ylabel('Density = True')
+        plt.xlabel('TCAV value')
+        plt.show()
+
         if bottleneck not in plot_data:
           plot_data[bottleneck] = {'bn_vals': [], 'bn_stds': [], 'significant': []}
 

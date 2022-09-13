@@ -1,0 +1,9 @@
+
+with open('discrete_result_random_30.pickle', 'wb') as handle:
+    pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    
+with open('discrete_result_random_10.pickle', 'rb') as handle:
+    results = pickle.load(handle)
+
+with open('discrete_result_random_30.pickle', 'rb') as handle:
+    results = pickle.load(handle)

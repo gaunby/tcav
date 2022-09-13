@@ -76,8 +76,8 @@ def make_concepts_targets_and_randoms(source_dir):
                       "dst_host_same_src_port_rate_more_than_one")
 
   # Making random_examples
-  random_size = 10
-  random_partitions = 11
+  random_size = 30#10
+  random_partitions = 31#11
 
   for i in range(random_partitions):
     random_partition_name = "random500_" + str(i)
