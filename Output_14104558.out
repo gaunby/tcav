@@ -1,0 +1,35 @@
+This may take a while... Go get coffee!
+done!
+Class = zebra
+  Concept = dotted
+    Bottleneck = mixed3a. TCAV Score = 0.34 (+- 0.08), random was 0.50 (+- 0.10). p-val = 0.000 (significant)
+    Bottleneck = mixed3b. TCAV Score = 0.33 (+- 0.09), random was 0.50 (+- 0.13). p-val = 0.000 (significant)
+    Bottleneck = mixed4a. TCAV Score = 0.31 (+- 0.08), random was 0.50 (+- 0.17). p-val = 0.000 (significant)
+    Bottleneck = mixed4b. TCAV Score = 0.21 (+- 0.08), random was 0.50 (+- 0.17). p-val = 0.000 (significant)
+    Bottleneck = mixed4c. TCAV Score = 0.47 (+- 0.16), random was 0.50 (+- 0.22). p-val = 0.502 (not significant)
+    Bottleneck = mixed4d. TCAV Score = 0.72 (+- 0.25), random was 0.51 (+- 0.23). p-val = 0.000 (significant)
+    Bottleneck = mixed4e. TCAV Score = 0.64 (+- 0.23), random was 0.49 (+- 0.27). p-val = 0.007 (significant)
+    Bottleneck = mixed5a. TCAV Score = 0.81 (+- 0.18), random was 0.51 (+- 0.29). p-val = 0.000 (significant)
+    Bottleneck = mixed5b. TCAV Score = 0.47 (+- 0.33), random was 0.51 (+- 0.35). p-val = 0.578 (not significant)
+  Concept = striped
+    Bottleneck = mixed3a. TCAV Score = 0.55 (+- 0.07), random was 0.50 (+- 0.10). p-val = 0.052 (not significant)
+    Bottleneck = mixed3b. TCAV Score = 0.64 (+- 0.11), random was 0.50 (+- 0.13). p-val = 0.000 (significant)
+    Bottleneck = mixed4a. TCAV Score = 0.49 (+- 0.08), random was 0.50 (+- 0.17). p-val = 0.768 (not significant)
+    Bottleneck = mixed4b. TCAV Score = 0.68 (+- 0.15), random was 0.50 (+- 0.17). p-val = 0.000 (significant)
+    Bottleneck = mixed4c. TCAV Score = 0.89 (+- 0.09), random was 0.50 (+- 0.22). p-val = 0.000 (significant)
+    Bottleneck = mixed4d. TCAV Score = 0.94 (+- 0.08), random was 0.51 (+- 0.23). p-val = 0.000 (significant)
+    Bottleneck = mixed4e. TCAV Score = 0.95 (+- 0.08), random was 0.49 (+- 0.27). p-val = 0.000 (significant)
+    Bottleneck = mixed5a. TCAV Score = 1.00 (+- 0.00), random was 0.51 (+- 0.29). p-val = 0.000 (significant)
+    Bottleneck = mixed5b. TCAV Score = 1.00 (+- 0.01), random was 0.51 (+- 0.35). p-val = 0.000 (significant)
+  Concept = zigzagged
+    Bottleneck = mixed3a. TCAV Score = 0.42 (+- 0.05), random was 0.50 (+- 0.10). p-val = 0.000 (significant)
+    Bottleneck = mixed3b. TCAV Score = 0.46 (+- 0.08), random was 0.50 (+- 0.13). p-val = 0.193 (not significant)
+    Bottleneck = mixed4a. TCAV Score = 0.46 (+- 0.09), random was 0.50 (+- 0.17). p-val = 0.214 (not significant)
+    Bottleneck = mixed4b. TCAV Score = 0.58 (+- 0.16), random was 0.50 (+- 0.17). p-val = 0.018 (significant)
+    Bottleneck = mixed4c. TCAV Score = 0.80 (+- 0.13), random was 0.50 (+- 0.22). p-val = 0.000 (significant)
+    Bottleneck = mixed4d. TCAV Score = 0.85 (+- 0.12), random was 0.51 (+- 0.23). p-val = 0.000 (significant)
+    Bottleneck = mixed4e. TCAV Score = 0.86 (+- 0.14), random was 0.49 (+- 0.27). p-val = 0.000 (significant)
+    Bottleneck = mixed5a. TCAV Score = 0.94 (+- 0.05), random was 0.51 (+- 0.29). p-val = 0.000 (significant)
+    Bottleneck = mixed5b. TCAV Score = 0.53 (+- 0.35), random was 0.51 (+- 0.35). p-val = 0.733 (not significant)
+HEJ1
+{'mixed3a': {'bn_vals': [0.34077555816686256, 0.01, 0.41891891891891897], 'bn_stds': [0.08443480455553325, 0, 0.05463843918948375], 'significant': [True, False, True]}, 'mixed3b': {'bn_vals': [0.32726204465334896, 0.6433607520564042, 0.01], 'bn_stds': [0.08883386487676251, 0.10593730707983348, 0], 'significant': [True, True, False]}, 'mixed4a': {'bn_vals': [0.30787309048178624, 0.01, 0.01], 'bn_stds': [0.0837739770746772, 0, 0], 'significant': [True, False, False]}, 'mixed4b': {'bn_vals': [0.21034077555816685, 0.6768507638072857, 0.5840188014101059], 'bn_stds': [0.07988006768205563, 0.14722170806399862, 0.15769183612318588], 'significant': [True, True, True]}, 'mixed4c': {'bn_vals': [0.01, 0.8924794359576971, 0.8019976498237369], 'bn_stds': [0, 0.08743950727278796, 0.12523098965271998], 'significant': [False, True, True]}, 'mixed4d': {'bn_vals': [0.7156286721504115, 0.9365452408930668, 0.853701527614571], 'bn_stds': [0.24752974187724966, 0.08092766357167329, 0.12071421345985993], 'significant': [True, True, True]}, 'mixed4e': {'bn_vals': [0.6398354876615746, 0.945358401880141, 0.8613396004700354], 'bn_stds': [0.22579433878140967, 0.08353876656722078, 0.14044884196077645], 'significant': [True, True, True]}, 'mixed5a': {'bn_vals': [0.8055229142185665, 0.9994124559341951, 0.9418331374853115], 'bn_stds': [0.1848047920565522, 0.002755825945842198, 0.05323032504303702], 'significant': [True, True, True]}, 'mixed5b': {'bn_vals': [0.01, 0.9952996474735605, 0.01], 'bn_stds': [0, 0.009437355114106333, 0], 'significant': [False, True, False]}}

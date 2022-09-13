@@ -6,6 +6,11 @@ import tcav.cav as cav
 import tcav.model  as model
 import tcav.tcav as tcav
 import tcav.utils as utils
+
+# Added to plot in gbar
+import matplotlib
+matplotlib.use('Agg')
+
 import tcav.utils_plot as utils_plot # utils_plot requires matplotlib
 import os 
 import tensorflow as tf
@@ -26,7 +31,7 @@ cav_dir = working_dir + '/cavs/'
 # where the images live.
 
 source_dir = '/work3/s174498/ImageNet_Data'
-bottlenecks = ['mixed4a']  # @param 
+bottlenecks = ['mixed3a', 'mixed3b', 'mixed4a', 'mixed4b', 'mixed4c', 'mixed4d', 'mixed4e', 'mixed5a', 'mixed5b']  # @param 
       
 utils.make_dir_if_not_exists(activation_dir)
 utils.make_dir_if_not_exists(working_dir)

@@ -22,7 +22,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import datetime
 
-
 # helper function to output plot and write summary data
 def plot_results(results, random_counterpart=None, random_concepts=None, num_random_exp=100,
     min_p_val=0.05):
@@ -58,14 +57,14 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
   # prepare data
   # dict with keys of concepts containing dict with bottlenecks
   result_summary = {}
-    
+
   # random
   random_i_ups = {}
     
   for result in results:
     if result['cav_concept'] not in result_summary:
       result_summary[result['cav_concept']] = {}
-    
+
     if result['bottleneck'] not in result_summary[result['cav_concept']]:
       result_summary[result['cav_concept']][result['bottleneck']] = []
     
@@ -133,8 +132,9 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
   index = np.arange(num_concepts) * bar_width * (num_bottlenecks + 1)
 
   # matplotlib
+  print('HEJ1')
   fig, ax = plt.subplots()
-    
+  
   # draw all bottlenecks individually
   for i, [bn, vals] in enumerate(plot_data.items()):
     bar = ax.bar(index + i * bar_width, vals['bn_vals'],
@@ -147,7 +147,9 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
         ax.text(index[j] + i * bar_width - 0.1, 0.01, "*",
             fontdict = {'weight': 'bold', 'size': 16,
             'color': bar.patches[0].get_facecolor()})
+
   print (plot_data)
+
   # set properties
   ax.set_title('TCAV Scores for each concept and bottleneck')
   ax.set_ylabel('TCAV Score')
@@ -155,6 +157,7 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
   ax.set_xticklabels(plot_concepts)
   ax.legend()
   fig.tight_layout()
+
   # ct stores current time
   ct = datetime.datetime.now()
   plt.savefig(f'SavedResults/results_{ct}.png')
