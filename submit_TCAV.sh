@@ -4,6 +4,7 @@
 #BSUB -q gpuv100
 ### -- set the job Name --
 #BSUB -J Run_TCAV
+#BSUB -R "span[hosts=1]"
 ### -- ask for number of cores (default: 1) --
 #BSUB -n 2
 ### -- specify that the cores must be on the same host --

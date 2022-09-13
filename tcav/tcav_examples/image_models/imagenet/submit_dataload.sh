@@ -7,6 +7,7 @@
 #BSUB -J GenerateImageNet_Data
 ### -- ask for number of cores (default: 1) --
 #BSUB -n 2
+#BSUB -R "span[hosts=1]"
 ### -- specify that the cores must be on the same host --
 #BSUB -gpu "num=1:mode=exclusive_process"
 ### -- specify that we need 2GB of memory per core/slot --
@@ -31,4 +32,4 @@
 # here follow the commands you want to execute
 source ~/miniconda3/bin/activate
 conda activate TCAV_env
-python download_and_make_datasets.py --source_dir=/work3/s174498/ImageNet_Data --number_of_images_per_folder=100 --number_of_random_folders=499
+python download_and_make_datasets.py --source_dir=/work3/s174498/ImageNet_Data2 --number_of_images_per_folder=100 --number_of_random_folders=100
