@@ -22,7 +22,7 @@ model_to_run = 'GoogleNet'
 user = 'mariafogh'
 # the name of the parent directory that results are stored (only if you want to cache)
 project_name = 'tcav_class_test'
-working_dir = "/work3/s174498/TestRandom2_CavActivations/" + user + '/' + project_name
+working_dir = "/work3/s174498/SaveCavsActivations/" + user + '/' + project_name
 # where activations are stored (only if your act_gen_wrapper does so)
 activation_dir =  working_dir+ '/activations/'
 # where CAVs are stored. 
@@ -30,8 +30,8 @@ activation_dir =  working_dir+ '/activations/'
 cav_dir = working_dir + '/cavs/'
 # where the images live.
 
-source_dir = '/work3/s174498/TestRandom2_ImageNet'
-bottlenecks = ['mixed3a', 'mixed3b']  # @param 
+source_dir = '/work3/s174498/ImageNet_Data'
+bottlenecks = ['mixed3a', 'mixed3b', 'mixed4a', 'mixed4b', 'mixed4c', 'mixed4d', 'mixed4e', 'mixed5a', 'mixed5b']  # @param 
       
 utils.make_dir_if_not_exists(activation_dir)
 utils.make_dir_if_not_exists(working_dir)
@@ -72,7 +72,7 @@ act_generator = act_gen.ImageActivationGenerator(mymodel, source_dir, activation
 # Step 4: Run TCAV
 import absl
 absl.logging.set_verbosity(0)
-num_random_exp=3
+num_random_exp=27
 ## only running num_random_exp = 10 to save some time. The paper number are reported for 500 random runs. 
 mytcav = tcav.TCAV(sess,
                    target,
