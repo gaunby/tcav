@@ -50,10 +50,24 @@ import tensorflow as tf
 import socket
 import random
 import signal
+from contextlib import contextmanager
 
 kImagenetBaseUrl = "http://imagenet.stanford.edu/api/imagenet.synset.geturls?wnid="
 kBrodenTexturesPath = "broden1_224/images/dtd/"
 kMinFileSize = 10000
+
+class TimeoutException(Exception): pass
+
+@contextmanager
+def time_limit(seconds):
+    def signal_handler(signum, frame):
+        raise TimeoutException("Timed out!")
+    signal.signal(signal.SIGALRM, signal_handler)
+    signal.alarm(seconds)
+    try:
+        yield
+    finally:
+        signal.alarm(0)
 
 ####### Helper functions
 """ Makes a dataframe matching imagenet labels with their respective url.
@@ -71,21 +85,6 @@ def make_imagenet_dataframe(path_to_imagenet_classes):
   urls_dataframe = pd.read_csv(path_to_imagenet_classes)
   urls_dataframe["url"] = kImagenetBaseUrl + urls_dataframe["synid"]
   return urls_dataframe
-
-
-
-
-
-def signal_handler(signum, frame):
-    raise Exception("Timed out!")
-
-signal.signal(signal.SIGALRM, signal_handler)
-signal.alarm(10)   # Ten seconds
-try:
-    long_function_call()
-except Exception, msg:
-    print("Timed out!")
-
 
 """ Downloads an image.
 
@@ -106,20 +105,15 @@ def download_image(path, url):
   saving_path = os.path.join(path, image_prefix + ".jpg")
   
   try:
-    # Throw an exception if 
-    urllib.request.urlretrieve(url, saving_path)
-
-  try:
-      with time_limit(10):
-          long_function_call()
+    with time_limit(5):
+      # Throw an exception if 
+      urllib.request.urlretrieve(url, saving_path)
   except TimeoutException as e:
-      print("Timed out!")
-
+    A=0
 
   try:
     # Throw an exception if the image is unreadable or corrupted
     Image.open(saving_path).verify()
-    print("The file can open!")
 
     # Remove images smaller than 10kb, to make sure we are not downloading empty/low quality images
 
@@ -131,7 +125,6 @@ def download_image(path, url):
 
   # PIL.Image.verify() throws a default exception if it finds a corrupted image.
   except Exception as e:
-    print("path removed")
     tf.io.gfile.remove(
         saving_path
     )  # We need to delete it, since urllib automatically saves them.
@@ -307,36 +300,27 @@ def generate_random_folders(working_directory, random_folder_prefix,
                             number_of_random_folders,
                             number_of_examples_per_folder, imagenet_dataframe):
   imagenet_concepts = imagenet_dataframe["class_name"].values.tolist()
-  for partition_number in range(28, number_of_random_folders):
-    print(str(partition_number))
+  for partition_number in range(30, number_of_random_folders):
     partition_name = random_folder_prefix + str(partition_number)
-    print(str(partition_name))
     partition_folder_path = os.path.join(working_directory, partition_name)
-    print(str(partition_folder_path))
+    print("Folder path: " + partition_folder_path)
     tf.io.gfile.makedirs(partition_folder_path)
 
     # Select a random concept
     examples_selected = 0
     while examples_selected < number_of_examples_per_folder:
-      print("We want: " + str(number_of_examples_per_folder) + " images per folder")
       print("We are at: " + str(examples_selected))
       random_concept = random.choice(imagenet_concepts)
-      print(str(random_concept))
       urls = fetch_all_urls_for_concept(imagenet_dataframe, random_concept)
 
-      print("Length of urls for random_concept: " + str(len(urls)))
-
       for url in urls:
-        print("Current url" + str(url))
         # We are filtering out images from Flickr urls, since several of those were removed
         if "flickr" not in url:
           try:
             download_image(partition_folder_path, url)
-            print("Yes, downloaded")
             examples_selected += 1
-            print("Have downloaded " + str(examples_selected))
+            
             if (examples_selected) % 10 == 0:
-              print("if-statement")
               tf.compat.v1.logging.info("Downloaded " + str(examples_selected) + "/" +
                               str(number_of_examples_per_folder) + " for " +
                               partition_name)
