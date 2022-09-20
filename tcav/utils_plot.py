@@ -24,7 +24,7 @@ import matplotlib.pyplot as plt
 
 # helper function to output plot and write summary data
 def plot_results(results, random_counterpart=None, random_concepts=None, num_random_exp=100,
-    min_p_val=0.05):
+    min_p_val=0.05, plot_hist = False):
   """Helper function to organize results.
   When run in a notebook, outputs a matplotlib bar plot of the
   TCAV scores for all bottlenecks for each concept, replacing the
@@ -80,33 +80,34 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
   # to plot, must massage data again 
   plot_data = {}
   plot_concepts = []
-
+  count = 0 
   # print concepts and classes with indentation
   for concept in result_summary:
-        
     # if not random
     if not is_random_concept(concept):
       print(" ", "Concept =", concept)
       plot_concepts.append(concept)
-
       for bottleneck in result_summary[concept]:
         i_ups = [item['i_up'] for item in result_summary[concept][bottleneck]]
         
         # Calculate statistical significance
         _, p_val = ttest_ind(random_i_ups[bottleneck], i_ups)
         
-        # Plot histogram 
-        print('>>> P-val <<<\n', np.round(p_val,3))
-        print('>>> Number of TCAV concept observations <<<\n', len(i_ups))
-        print('>>> Number of TCAV random observations <<<\n', len(random_i_ups[bottleneck]))
-        plt.hist(i_ups, 10,density=True, range = (0,1),facecolor='g', alpha=0.75, label = concept)
-        plt.hist(random_i_ups[bottleneck], 10,density=True,range = (0,1), facecolor='r', alpha=0.75, label='random')
-        plt.legend(loc='upper right')
-        plt.title(f'Histogram of {concept} (concept)\nin {bottleneck} (bottleneck)')
-        plt.ylabel('Density = True')
-        plt.xlabel('TCAV value')
-        plt.show()
+        if count == 0:
+          print('>>> Number of TCAV concept observations <<<\n', len(i_ups))
+          print('>>> Number of TCAV random observations <<<\n', len(random_i_ups[bottleneck]))
+          count = 1
 
+        # Plot histogram 
+        if plot_hist:
+          plt.hist(i_ups, 10,density=True, range = (0,1),facecolor='g', alpha=0.75, label = concept)
+          plt.hist(random_i_ups[bottleneck], 10,density=True,range = (0,1), facecolor='r', alpha=0.75, label='random')
+          plt.legend(loc='upper right')
+          plt.title(f'Histogram of {concept} (concept)\nin {bottleneck} (bottleneck)')
+          plt.ylabel('Density = True')
+          plt.xlabel('TCAV value')
+          plt.show()
+          
         if bottleneck not in plot_data:
           plot_data[bottleneck] = {'bn_vals': [], 'bn_stds': [], 'significant': []}
 
@@ -142,7 +143,6 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
   # create location for each bar. scale by an appropriate factor to ensure 
   # the final plot doesn't have any parts overlapping
   index = np.arange(num_concepts) * bar_width * (num_bottlenecks + 1)
-
   # matplotlib
   fig, ax = plt.subplots()
     
