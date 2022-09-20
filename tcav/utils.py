@@ -54,6 +54,7 @@ def flatten(nested_list):
 def process_what_to_run_expand(pairs_to_test,
                                random_counterpart=None,
                                num_random_exp=100,
+                               start_num_random_exp=3,
                                random_concepts=None):
   """Get concept vs. random or random vs. random pairs to run.
 
@@ -78,6 +79,7 @@ def process_what_to_run_expand(pairs_to_test,
     new_pairs_to_test: expanded
   """
   def get_random_concept(i):
+    print('process_what_to_run_expand: random500_{}'.format(i))
     return (random_concepts[i] if random_concepts
             else 'random500_{}'.format(i))
 
@@ -86,14 +88,18 @@ def process_what_to_run_expand(pairs_to_test,
     new_pairs_to_test_t = []
     # if only one element was given, this is to test with random.
     if len(concept_set) == 1:
-      i = 0
-      while len(new_pairs_to_test_t) < min(100, num_random_exp):
+      i = start_num_random_exp
+      print("i=", i)
+      while len(new_pairs_to_test_t) < min(100, start_num_random_exp):
         # make sure that we are not comparing the same thing to each other.
+        print("Concept: ", concept_set[0])
         if concept_set[0] != get_random_concept(
             i) and random_counterpart != get_random_concept(i):
+          print("True")  
           new_pairs_to_test_t.append(
               (target, [concept_set[0], get_random_concept(i)]))
         i += 1
+        print("Length of new_pairs_to_test_t = ", len(new_pairs_to_test_t))
     elif len(concept_set) > 1:
       new_pairs_to_test_t.append((target, concept_set))
     else:
@@ -149,6 +155,8 @@ def process_what_to_run_randoms(pairs_to_test, random_counterpart):
   pairs_for_sstesting_random = []
   targets = list(set([pair[0] for pair in pairs_to_test]))
   for target in targets:
+    print("Target", target)
+    print("random_counterpart", random_counterpart)
     pairs_for_sstesting_random.append([target, [random_counterpart]])
   return pairs_for_sstesting_random
 

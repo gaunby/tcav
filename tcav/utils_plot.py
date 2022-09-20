@@ -100,7 +100,6 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
         print('>>> Number of TCAV concept observations <<<\n', len(i_ups))
         print('>>> Number of TCAV random observations <<<\n', len(random_i_ups[bottleneck]))
 
-        # ELLEN
         plt.figure()
         plt.hist(i_ups, 10,density=True, range = (0,1),facecolor='g', alpha=0.75, label = concept)
         plt.hist(random_i_ups[bottleneck], 10,density=True,range = (0,1), facecolor='r', alpha=0.75, label='random')

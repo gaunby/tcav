@@ -158,6 +158,7 @@ class TCAV(object):
         random_counterpart=None,
         cav_dir=None,
         num_random_exp=5,
+        start_num_random_exp = 0, 
         random_concepts=None,
     ):
         """Initialze tcav class.
@@ -204,7 +205,7 @@ class TCAV(object):
 
         # make pairs to test.
         self._process_what_to_run_expand(
-            num_random_exp=num_random_exp, random_concepts=random_concepts
+            num_random_exp=num_random_exp, start_num_random_exp=start_num_random_exp, random_concepts=random_concepts
         )
         # parameters
         self.params = self.get_params()
@@ -352,7 +353,7 @@ class TCAV(object):
         del acts
         return result
 
-    def _process_what_to_run_expand(self, num_random_exp=100, random_concepts=None):
+    def _process_what_to_run_expand(self, num_random_exp=100, start_num_random_exp=0, random_concepts=None):
         """Get tuples of parameters to run TCAV with.
 
         TCAV builds random concept to conduct statistical significance testing
@@ -388,11 +389,13 @@ class TCAV(object):
 
         # ith random concept
         def get_random_concept(i):
+            print("get_random_concept: random500_{}".format(i))
             return random_concepts[i] if random_concepts else "random500_{}".format(i)
 
         if self.random_counterpart is None:
             # TODO random500_1 vs random500_0 is the same as 1 - (random500_0 vs random500_1)
-            for i in range(num_random_exp):
+            #for i in range(num_random_exp):
+            for i in range(start_num_random_exp, start_num_random_exp+num_random_exp): 
                 (
                     all_concepts_randoms_tmp,
                     pairs_to_run_randoms_tmp,
@@ -400,7 +403,8 @@ class TCAV(object):
                     utils.process_what_to_run_randoms(
                         target_concept_pairs, get_random_concept(i)
                     ),
-                    num_random_exp=num_random_exp - 1,
+                    num_random_exp = num_random_exp - 1,
+                    start_num_random_exp = start_num_random_exp,
                     random_concepts=random_concepts,
                 )
 

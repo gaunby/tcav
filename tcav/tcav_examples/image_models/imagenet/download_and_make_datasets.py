@@ -59,7 +59,7 @@ def make_concepts_targets_and_randoms(source_dir, number_of_images_per_folder, n
     '''''
     for image in imagenet_classes:
         fetcher.fetch_imagenet_class(source_dir, image, number_of_images_per_folder, imagenet_dataframe)
-    '''''
+    
     # Make concepts from broden
     for concept in broden_concepts:
         fetcher.download_texture_to_working_folder(broden_path=os.path.join(source_dir, 'broden1_224'),
@@ -75,7 +75,7 @@ def make_concepts_targets_and_randoms(source_dir, number_of_images_per_folder, n
         number_of_examples_per_folder=number_of_images_per_folder,
         imagenet_dataframe=imagenet_dataframe
     )
-    '''''
+
 
 
 
