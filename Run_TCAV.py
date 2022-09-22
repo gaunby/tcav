@@ -6,6 +6,7 @@ import tcav.cav as cav
 import tcav.model  as model
 import tcav.tcav as tcav
 import tcav.utils as utils
+import pickle
 
 # Added to plot in gbar
 import matplotlib
@@ -22,7 +23,7 @@ model_to_run = 'GoogleNet'
 user = 'mariafogh'
 # the name of the parent directory that results are stored (only if you want to cache)
 project_name = 'tcav_class_test'
-working_dir = "/work3/s174498/SaveCavsActivations_TEST/" + user + '/' + project_name
+working_dir = "/work3/s174498/SaveCavsActivations/" + user + '/' + project_name
 # where activations are stored (only if your act_gen_wrapper does so)
 activation_dir =  working_dir+ '/activations/'
 # where CAVs are stored. 
@@ -31,8 +32,12 @@ cav_dir = working_dir + '/cavs/'
 # where the images live.
 
 source_dir = '/work3/s174498/ImageNet_Data'
-#bottlenecks = ['mixed3a', 'mixed3b', 'mixed4a', 'mixed4b', 'mixed4c', 'mixed4d', 'mixed4e', 'mixed5a', 'mixed5b']  # @param 
-bottlenecks = ['mixed3a'] 
+# bottlenecks = ['mixed3a', 'mixed3b', 'mixed4a', 'mixed4b', 'mixed4c', 'mixed4d', 'mixed4e', 'mixed5a', 'mixed5b']  # @param 
+# bottlenecks = ['mixed4c', 'mixed4d']  # @param 
+bottlenecks = ['inception4c']  # @param 
+# bottlenecks = ['mixed3a']
+
+
 
 utils.make_dir_if_not_exists(activation_dir)
 utils.make_dir_if_not_exists(working_dir)
@@ -73,8 +78,8 @@ act_generator = act_gen.ImageActivationGenerator(mymodel, source_dir, activation
 # Step 4: Run TCAV
 import absl
 absl.logging.set_verbosity(0)
+start_num_random_exp=0
 num_random_exp=3
-start_num_random_exp=3
 ## only running num_random_exp = 10 to save some time. The paper number are reported for 500 random runs. 
 mytcav = tcav.TCAV(sess,
                    target,
@@ -88,8 +93,9 @@ mytcav = tcav.TCAV(sess,
 print ('This may take a while... Go get coffee!')
 results = mytcav.run(run_parallel=False)
 
-# print(results)
-# Save results.plk
+end_num_random_exp=start_num_random_exp+num_random_exp-1
+with open('results_pickle/4c4d_result_random500_' + str(start_num_random_exp) + '_to_' + str(end_num_random_exp) + '.pkl', 'wb') as handle:
+    pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 print ('done!')
 

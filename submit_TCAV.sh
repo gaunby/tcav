@@ -1,7 +1,7 @@
 #!/bin/sh
 ### General options
 ### -- specify queue --
-#BSUB -q gpua100
+#BSUB -q gpuv100
 ### -- set the job Name --
 #BSUB -J Run_TCAV
 #BSUB -R "span[hosts=1]"
@@ -14,7 +14,7 @@
 ### -- specify that we want the job to get killed if it exceeds 3 GB per core/slot --
 #BSUB -M 32GB
 ### -- set walltime limit: hh:mm --
-#BSUB -W 72:00
+#BSUB -W 24:00
 ### -- set the email address --
 #BSUB -u s174498@student.dtu.dk
 # please uncomment the following line and put in your e-mail address,

@@ -374,7 +374,8 @@ class TCAV(object):
         all_concepts_concepts, pairs_to_run_concepts = utils.process_what_to_run_expand(
             utils.process_what_to_run_concepts(target_concept_pairs),
             self.random_counterpart,
-            num_random_exp=num_random_exp
+            num_random_exp=num_random_exp, 
+            start_num_random_exp=start_num_random_exp
             - (
                 1
                 if random_concepts and self.random_counterpart in random_concepts

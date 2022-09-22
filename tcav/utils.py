@@ -54,7 +54,7 @@ def flatten(nested_list):
 def process_what_to_run_expand(pairs_to_test,
                                random_counterpart=None,
                                num_random_exp=100,
-                               start_num_random_exp=3,
+                               start_num_random_exp=0,
                                random_concepts=None):
   """Get concept vs. random or random vs. random pairs to run.
 
@@ -90,7 +90,7 @@ def process_what_to_run_expand(pairs_to_test,
     if len(concept_set) == 1:
       i = start_num_random_exp
       print("i=", i)
-      while len(new_pairs_to_test_t) < min(100, start_num_random_exp):
+      while len(new_pairs_to_test_t)+start_num_random_exp < min(500, start_num_random_exp+num_random_exp):
         # make sure that we are not comparing the same thing to each other.
         print("Concept: ", concept_set[0])
         if concept_set[0] != get_random_concept(
@@ -99,7 +99,7 @@ def process_what_to_run_expand(pairs_to_test,
           new_pairs_to_test_t.append(
               (target, [concept_set[0], get_random_concept(i)]))
         i += 1
-        print("Length of new_pairs_to_test_t = ", len(new_pairs_to_test_t))
+        print("Length of new_pairs_to_test_t = ", len(new_pairs_to_test_t)+start_num_random_exp)
     elif len(concept_set) > 1:
       new_pairs_to_test_t.append((target, concept_set))
     else:
@@ -133,6 +133,8 @@ def process_what_to_run_concepts(pairs_to_test):
   # prepare pairs for concpet vs random.
   for pair in pairs_to_test:
     for concept in pair[1]:
+      print("pair: ", pair[0])
+      print("concept: ", [concept])
       pairs_for_sstesting.append([pair[0], [concept]])
   return pairs_for_sstesting
 
