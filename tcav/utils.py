@@ -89,13 +89,11 @@ def process_what_to_run_expand(pairs_to_test,
     # if only one element was given, this is to test with random.
     if len(concept_set) == 1:
       i = start_num_random_exp
-      print("i=", i)
       while len(new_pairs_to_test_t)+start_num_random_exp < min(500, start_num_random_exp+num_random_exp):
         # make sure that we are not comparing the same thing to each other.
         print("Concept: ", concept_set[0])
         if concept_set[0] != get_random_concept(
             i) and random_counterpart != get_random_concept(i):
-          print("True")  
           new_pairs_to_test_t.append(
               (target, [concept_set[0], get_random_concept(i)]))
         i += 1
