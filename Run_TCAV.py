@@ -32,9 +32,9 @@ cav_dir = working_dir + '/cavs/'
 # where the images live.
 
 source_dir = '/work3/s174498/ImageNet_Data'
-# bottlenecks = ['mixed3a', 'mixed3b', 'mixed4a', 'mixed4b', 'mixed4c', 'mixed4d', 'mixed4e', 'mixed5a', 'mixed5b']  # @param 
+bottlenecks = ['mixed3a', 'mixed3b', 'mixed4a', 'mixed4b', 'mixed4c', 'mixed4d', 'mixed4e', 'mixed5a', 'mixed5b']  # @param 
 # bottlenecks = ['mixed4c', 'mixed4d']  # @param 
-bottlenecks = ['inception4c']  # @param 
+# bottlenecks = ['inception4c']  # @param 
 # bottlenecks = ['mixed3a']
 
 
@@ -78,8 +78,10 @@ act_generator = act_gen.ImageActivationGenerator(mymodel, source_dir, activation
 # Step 4: Run TCAV
 import absl
 absl.logging.set_verbosity(0)
-start_num_random_exp=0
-num_random_exp=3
+start_num_random_exp = 0
+num_random_exp = 50
+num_random_concepts_to_pick = 5
+
 ## only running num_random_exp = 10 to save some time. The paper number are reported for 500 random runs. 
 mytcav = tcav.TCAV(sess,
                    target,
@@ -89,13 +91,20 @@ mytcav = tcav.TCAV(sess,
                    alphas,
                    cav_dir=cav_dir,
                    num_random_exp=num_random_exp,
-                   start_num_random_exp = start_num_random_exp)
-print ('This may take a while... Go get coffee!')
-results = mytcav.run(run_parallel=False)
+                   start_num_random_exp = start_num_random_exp,
+                   num_random_concepts_to_pick = num_random_concepts_to_pick)
 
-end_num_random_exp=start_num_random_exp+num_random_exp-1
-with open('results_pickle/4c4d_result_random500_' + str(start_num_random_exp) + '_to_' + str(end_num_random_exp) + '.pkl', 'wb') as handle:
+print ('This may take a while... Go get coffee!')
+results = mytcav.run(run_parallel=False, overwrite=True)
+
+# end_num_random_exp=start_num_random_exp+num_random_exp-1
+#with open('results_pickle/4c4d_result_random500_' + str(start_num_random_exp) + '_to_' + str(end_num_random_exp) + '.pkl', 'wb') as handle:
+    #pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+with open('results_pickle/results_'+ str(target)+ '_' + str(num_random_exp) + str(num_random_concepts_to_pick) +'.pkl', 'wb') as handle:
     pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+
 
 print ('done!')
 
