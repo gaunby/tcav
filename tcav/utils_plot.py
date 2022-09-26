@@ -21,6 +21,7 @@ from scipy.stats import ttest_ind
 import numpy as np
 import matplotlib.pyplot as plt
 import datetime
+import seaborn as sns 
 
 # helper function to output plot and write summary data
 def plot_results(results, random_counterpart=None, random_concepts=None, num_random_exp=100,
@@ -40,7 +41,7 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
     num_random_exp: number of random experiments that were run.
     min_p_val: minimum p value for statistical significance
   """
-  print(min_p_val)
+  print('P-values:',min_p_val)
 
   # helper function, returns if this is a random concept
   def is_random_concept(concept):
@@ -107,12 +108,19 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
         
         if plot_hist:
           plt.figure()
-          plt.hist(i_ups, 10,density=True, range = (0,1),facecolor='g', alpha=0.75, label = concept)
-          plt.hist(random_i_ups[bottleneck], 10,density=True,range = (0,1), facecolor='r', alpha=0.75, label='random')
+          plt.hist(i_ups, 25,density=True, range = (0,1),facecolor='g', alpha=0.75, label = concept)
+          plt.hist(random_i_ups[bottleneck], 25,density=True,range = (0,1), facecolor='r', alpha=0.75, label='random')
           plt.legend(loc='upper right')
           plt.title(f'Histogram of {concept} (concept)\nin {bottleneck} (bottleneck)')
           plt.ylabel('Density = True')
           plt.xlabel('TCAV value')
+
+          #plt.figure()
+          #sns.histplot(i_ups, stat = 'percent', binrange = (0,1), color = 'g')#, common_norm=False)
+          #sns.histplot(random_i_ups[bottleneck], stat = 'percent', binrange = (0,1), color = 'r')
+          #plt.xlabel('TCAV value')
+          #plt.show()
+          
 
         # ct stores current time
         ct = datetime.datetime.now()
