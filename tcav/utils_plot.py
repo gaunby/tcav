@@ -21,10 +21,12 @@ from scipy.stats import ttest_ind
 import numpy as np
 import matplotlib.pyplot as plt
 import datetime
+import seaborn as sns 
 
 # helper function to output plot and write summary data
 def plot_results(results, random_counterpart=None, random_concepts=None, num_random_exp=100,
-    min_p_val=0.05):
+    min_p_val=0.05, equal_var = True, alternative = 'two-sided', 
+    plot_hist = False):
   """Helper function to organize results.
   When run in a notebook, outputs a matplotlib bar plot of the
   TCAV scores for all bottlenecks for each concept, replacing the
@@ -39,6 +41,7 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
     num_random_exp: number of random experiments that were run.
     min_p_val: minimum p value for statistical significance
   """
+  print('P-values:',min_p_val)
 
   # helper function, returns if this is a random concept
   def is_random_concept(concept):
@@ -80,7 +83,7 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
   # to plot, must massage data again 
   plot_data = {}
   plot_concepts = []
-    
+  count = 0  
   # print concepts and classes with indentation
   for concept in result_summary:
         
@@ -93,20 +96,31 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
         i_ups = [item['i_up'] for item in result_summary[concept][bottleneck]]
         
         # Calculate statistical significance
-        _, p_val = ttest_ind(random_i_ups[bottleneck], i_ups)
+        _, p_val = ttest_ind(random_i_ups[bottleneck], i_ups, equal_var = equal_var, alternative = alternative)
+
+        if count == 0:
+          print('>>> Number of TCAV concept observations <<<\n', len(i_ups))
+          print('>>> Number of TCAV random observations <<<\n', len(random_i_ups[bottleneck]))
+          count = 1
+
 
         # Plot histogram 
-        print('>>> P-val <<<\n', np.round(p_val,3))
-        print('>>> Number of TCAV concept observations <<<\n', len(i_ups))
-        print('>>> Number of TCAV random observations <<<\n', len(random_i_ups[bottleneck]))
+        
+        if plot_hist:
+          plt.figure()
+          plt.hist(i_ups, 25,density=True, range = (0,1),facecolor='g', alpha=0.75, label = concept)
+          plt.hist(random_i_ups[bottleneck], 25,density=True,range = (0,1), facecolor='r', alpha=0.75, label='random')
+          plt.legend(loc='upper right')
+          plt.title(f'Histogram of {concept} (concept)\nin {bottleneck} (bottleneck)')
+          plt.ylabel('Density = True')
+          plt.xlabel('TCAV value')
 
-        plt.figure()
-        plt.hist(i_ups, 10,density=True, range = (0,1),facecolor='g', alpha=0.75, label = concept)
-        plt.hist(random_i_ups[bottleneck], 10,density=True,range = (0,1), facecolor='r', alpha=0.75, label='random')
-        plt.legend(loc='upper right')
-        plt.title(f'Histogram of {concept} (concept)\nin {bottleneck} (bottleneck)')
-        plt.ylabel('Density = True')
-        plt.xlabel('TCAV value')
+          #plt.figure()
+          #sns.histplot(i_ups, stat = 'percent', binrange = (0,1), color = 'g')#, common_norm=False)
+          #sns.histplot(random_i_ups[bottleneck], stat = 'percent', binrange = (0,1), color = 'r')
+          #plt.xlabel('TCAV value')
+          #plt.show()
+          
 
         # ct stores current time
         ct = datetime.datetime.now()
