@@ -144,12 +144,6 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
           #plt.xlabel('TCAV value')
           #plt.show()
         """
-          
-
-        # ct stores current time
-        ct = datetime.datetime.now()
-        plt.savefig(f'SavedResults/Hist_{concept}_in_{bottleneck}_{ct}.png')
-
 
         if bottleneck not in plot_data:
           plot_data[bottleneck] = {'bn_vals': [], 'bn_stds': [], 'significant': []}
@@ -200,7 +194,7 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
     plt.axvline(0.5, 0,10, ls = '--', lw = 0.8, color = 'grey');
 
     plt.tight_layout();
-    plt.savefig(f'SavedResults/imagenet_tcav_results/histogram_{results[0]["target_class"]}_{bottlenecks}.pdf')  
+    plt.savefig(f'SavedResults/imagenet_tcav_results/histogram_{results[0]["target_class"]}_{bottlenecks}.pdf')
     plt.show();
     
     
@@ -248,5 +242,5 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
   fig.tight_layout()
 
   # ct stores current time
-  ct = datetime.datetime.now()
-  plt.savefig(f'SavedResults/results_{ct}.png')
+  # ct = datetime.datetime.now()
+  # plt.savefig(f'SavedResults/results_{ct}.png')
