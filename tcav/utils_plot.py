@@ -17,15 +17,16 @@ limitations under the License.
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-from scipy.stats import ttest_ind
+from scipy.stats import ttest_ind, ttest_1samp
 import numpy as np
 import matplotlib.pyplot as plt
 import datetime
 import seaborn as sns 
+import pandas as pd
 
 # helper function to output plot and write summary data
 def plot_results(results, random_counterpart=None, random_concepts=None, num_random_exp=100,
-    min_p_val=0.05, equal_var = True, alternative = 'two-sided', 
+    min_p_val=0.05, alternative = 'two-sided', t_test_mean = None, bonferroni_nr = None,
     plot_hist = False):
   """Helper function to organize results.
   When run in a notebook, outputs a matplotlib bar plot of the
@@ -40,8 +41,11 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
     random_concepts: list of random experiments that were run. 
     num_random_exp: number of random experiments that were run.
     min_p_val: minimum p value for statistical significance
+    t_test_mean: if value is given a 1-sample t-test will beformed
+    plot_hist: to plot histograms of results 
+    alternative: input to t-test 
   """
-  print('P-values:',min_p_val)
+  # print('P-values:',min_p_val)
 
   # helper function, returns if this is a random concept
   def is_random_concept(concept):
@@ -55,8 +59,12 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
       return 'random500_' in concept
 
   # print class, it will be the same for all
-  print("Class =", results[0]['target_class'])
+  # print("Class =", results[0]['target_class'])
 
+  if bonferroni_nr == None:
+    bonferroni_nr = 1
+
+  min_p_val = min_p_val/bonferroni_nr
   # prepare data
   # dict with keys of concepts containing dict with bottlenecks
   result_summary = {}
@@ -84,19 +92,34 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
   plot_data = {}
   plot_concepts = []
   count = 0  
+  df_result = pd.DataFrame(columns = ['TCAV score','Concept','Bottleneck'])
   # print concepts and classes with indentation
   for concept in result_summary:
         
     # if not random
     if not is_random_concept(concept):
-      print(" ", "Concept =", concept)
+      # print(" ", "Concept =", concept)
       plot_concepts.append(concept)
 
       for bottleneck in result_summary[concept]:
         i_ups = [item['i_up'] for item in result_summary[concept][bottleneck]]
         
+        if bottleneck not in df_result['Bottleneck'].unique():
+          df_random = pd.DataFrame(random_i_ups[bottleneck],columns=['TCAV score'])
+          df_random['Concept'] = 'random'
+          df_random['Bottleneck'] = bottleneck
+          df_result = pd.concat([df_result, df_random], ignore_index=True)
+
+        df_concept = pd.DataFrame(i_ups,columns=['TCAV score'])
+        df_concept['Concept'] = concept
+        df_concept['Bottleneck'] = bottleneck
+        df_result = pd.concat([df_result, df_concept], ignore_index=True)
+
         # Calculate statistical significance
-        _, p_val = ttest_ind(random_i_ups[bottleneck], i_ups, equal_var = equal_var, alternative = alternative)
+        if t_test_mean == None:
+          _, p_val = ttest_ind(random_i_ups[bottleneck], i_ups, alternative = alternative)
+        else:
+          _, p_val = ttest_1samp(i_ups, t_test_mean,  alternative = alternative)
 
         if count == 0:
           print('>>> Number of TCAV concept observations <<<\n', len(i_ups))
@@ -105,7 +128,7 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
 
 
         # Plot histogram 
-        
+        """
         if plot_hist:
           plt.figure()
           plt.hist(i_ups, 25,density=True, range = (0,1),facecolor='g', alpha=0.75, label = concept)
@@ -120,6 +143,7 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
           #sns.histplot(random_i_ups[bottleneck], stat = 'percent', binrange = (0,1), color = 'r')
           #plt.xlabel('TCAV value')
           #plt.show()
+        """
           
 
         # ct stores current time
@@ -140,14 +164,46 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
           plot_data[bottleneck]['bn_vals'].append(np.mean(i_ups))
           plot_data[bottleneck]['bn_stds'].append(np.std(i_ups))
           plot_data[bottleneck]['significant'].append(True)
-
+        """
         print(3 * " ", "Bottleneck =", ("%s. TCAV Score = %.2f (+- %.2f), "
             "random was %.2f (+- %.2f). p-val = %.3f (%s)") % (
             bottleneck, np.mean(i_ups), np.std(i_ups),
             np.mean(random_i_ups[bottleneck]),
             np.std(random_i_ups[bottleneck]), p_val,
             "not significant" if p_val > min_p_val else "significant"))
-        
+        """
+  # histogram plots
+  palette ={"dotted": "darkblue", "striped": "darkorange", "zigzagged": "g", "random": "grey"}
+  for bottlenecks in df_result['Bottleneck'].unique():
+    data = df_result[df_result['Bottleneck'] == bottlenecks]
+
+    #plt.figure(figsize=(15,4));
+    
+    plt.subplots(nrows=1, ncols=3, sharey=True,figsize=(15,4));
+    plt.suptitle(f'Histogram of TCAV-scores for each concept in {bottlenecks}');
+    plt.subplot(1, 3, 1);
+    ax = sns.histplot(data=data[data['Concept'].isin(['dotted','random'])], x="TCAV score", hue="Concept",
+    hue_order = ['dotted','random'],stat = 'percent', binrange = (0,1),common_norm=False, bins = 20, element="step", palette=palette);
+    sns.move_legend( ax, loc = "upper left");
+    plt.axvline(0.5, 0,10, ls = '--', lw = 0.8, color = 'grey');
+    
+    plt.subplot(1, 3, 2);
+    ax = sns.histplot(data=data[data['Concept'].isin(['striped','random'])], x="TCAV score", hue_order = ['striped','random'],
+    hue="Concept", stat = 'percent', binrange = (0,1),common_norm=False, bins = 20, element="step", palette=palette);
+    sns.move_legend( ax, loc = "upper left");
+    plt.axvline(0.5, 0,10, ls = '--', lw = 0.8, color = 'grey');
+    
+    plt.subplot(1, 3, 3);
+    ax = sns.histplot(data=data[data['Concept'].isin(['zigzagged','random'])], x="TCAV score", hue_order =['zigzagged','random'],
+    hue="Concept", stat = 'percent', binrange = (0,1),common_norm=False, bins = 20, element="step", palette=palette);
+    sns.move_legend( ax, loc = "upper left");
+    plt.axvline(0.5, 0,10, ls = '--', lw = 0.8, color = 'grey');
+
+    plt.tight_layout();
+    plt.savefig(f'SavedResults/imagenet_tcav_results/histogram_{results[0]["target_class"]}_{bottlenecks}.pdf')  
+    plt.show();
+    
+    
   # subtract number of random experiments
   if random_counterpart:
     num_concepts = len(result_summary) - 1
@@ -181,7 +237,7 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
             fontdict = {'weight': 'bold', 'size': 16,
             'color': bar.patches[0].get_facecolor()})
 
-  print (plot_data)
+  # print (plot_data)
 
   # set properties
   ax.set_title('TCAV Scores for each concept and bottleneck')
