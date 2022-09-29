@@ -32,11 +32,10 @@ cav_dir = working_dir + '/cavs/'
 # where the images live.
 
 source_dir = '/work3/s174498/ImageNet_Data'
-# bottlenecks = ['mixed3a', 'mixed3b', 'mixed4a', 'mixed4b', 'mixed4c', 'mixed4d', 'mixed4e', 'mixed5a', 'mixed5b']  # @param 
+# bottlenecks = ['mixed3a', 'mixed3b', 'mixed4a', 'mixed4b', 'mixed4c', 'mixed4d', 'mixed4e', 'mixed5a', 'mixed5b', 'logit']  # @param 
 # bottlenecks = ['mixed4c', 'mixed4d']  # @param 
-bottlenecks = ['inception4c']  # @param 
+bottlenecks = ['logit']  # @param 
 # bottlenecks = ['mixed3a']
-
 
 
 utils.make_dir_if_not_exists(activation_dir)
