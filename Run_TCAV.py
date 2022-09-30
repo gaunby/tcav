@@ -32,15 +32,9 @@ cav_dir = working_dir + '/cavs/'
 # where the images live.
 
 source_dir = '/work3/s174498/ImageNet_Data'
-<<<<<<< HEAD
 # bottlenecks = ['mixed3a', 'mixed3b', 'mixed4a', 'mixed4b', 'mixed4c', 'mixed4d', 'mixed4e', 'mixed5a', 'mixed5b', 'logit']  # @param 
 # bottlenecks = ['mixed4c', 'mixed4d']  # @param 
 bottlenecks = ['logit']  # @param 
-=======
-bottlenecks = ['mixed3a', 'mixed3b', 'mixed4a', 'mixed4b', 'mixed4c', 'mixed4d', 'mixed4e', 'mixed5a', 'mixed5b']  # @param 
-# bottlenecks = ['mixed4c', 'mixed4d']  # @param 
-# bottlenecks = ['inception4c']  # @param 
->>>>>>> e2d9c7a9574e51e6e63e6042fa72f0d16bf97dd7
 # bottlenecks = ['mixed3a']
 
 
@@ -108,8 +102,6 @@ results = mytcav.run(run_parallel=False, overwrite=True)
 
 with open('results_pickle/results_'+ str(target)+ '_' + str(num_random_exp) +'_' + str(num_random_concepts_to_pick) +'.pkl', 'wb') as handle:
     pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-
 
 print ('done!')
 
