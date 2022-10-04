@@ -106,10 +106,11 @@ def download_image(path, url):
   
   try:
     with time_limit(5):
-      # Throw an exception if 
+      # Throw an exception if
       urllib.request.urlretrieve(url, saving_path)
   except TimeoutException as e:
     A=0
+
 
   try:
     # Throw an exception if the image is unreadable or corrupted
@@ -117,11 +118,10 @@ def download_image(path, url):
 
     # Remove images smaller than 10kb, to make sure we are not downloading empty/low quality images
 
-    '''''
+    
     if tf.io.gfile.stat(saving_path).length < kMinFileSize:
       tf.io.gfile.remove(saving_path)
       print("The file has been removed!")
-    '''''
 
   # PIL.Image.verify() throws a default exception if it finds a corrupted image.
   except Exception as e:
@@ -129,7 +129,7 @@ def download_image(path, url):
         saving_path
     )  # We need to delete it, since urllib automatically saves them.
     raise e
-
+    
 
 
 """ For a imagenet label, fetches all URLs that contain this image, from the main URL contained in the dataframe
@@ -202,7 +202,12 @@ def fetch_imagenet_class(path, class_name, number_of_images, imagenet_dataframe)
     if "flickr" not in image_url:
       try:
         download_image(concept_path, image_url)
-        num_downloaded += 1
+        image_name = image_url.split("/")[-1]
+        image_name = image_name.split("?")[0]
+        image_prefix = image_name.split(".")[0]
+        saving_path = os.path.join(concept_path, image_prefix + ".jpg")
+        if os.path.exists(saving_path):
+          num_downloaded += 1
 
       except Exception as e:
         tf.compat.v1.logging.info("Problem downloading imagenet image. Exception was " +
@@ -300,7 +305,7 @@ def generate_random_folders(working_directory, random_folder_prefix,
                             number_of_random_folders,
                             number_of_examples_per_folder, imagenet_dataframe):
   imagenet_concepts = imagenet_dataframe["class_name"].values.tolist()
-  for partition_number in range(489,number_of_random_folders):
+  for partition_number in range(401,number_of_random_folders):
     partition_name = random_folder_prefix + str(partition_number)
     partition_folder_path = os.path.join(working_directory, partition_name)
     print("Folder path: " + partition_folder_path)
@@ -318,7 +323,12 @@ def generate_random_folders(working_directory, random_folder_prefix,
         if "flickr" not in url:
           try:
             download_image(partition_folder_path, url)
-            examples_selected += 1
+            image_name = url.split("/")[-1]
+            image_name = image_name.split("?")[0]
+            image_prefix = image_name.split(".")[0]
+            saving_path = os.path.join(partition_folder_path, image_prefix + ".jpg")
+            if os.path.exists(saving_path):
+              examples_selected += 1
             
             if (examples_selected) % 10 == 0:
               tf.compat.v1.logging.info("Downloaded " + str(examples_selected) + "/" +
