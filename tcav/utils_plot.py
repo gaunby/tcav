@@ -27,7 +27,7 @@ import pandas as pd
 # helper function to output plot and write summary data
 def plot_results(results, random_counterpart=None, random_concepts=None, num_random_exp=100,
     min_p_val=0.05, alternative = 'two-sided', t_test_mean = None, bonferroni_nr = None,
-    plot_hist = False):
+    plot_hist = False, save_fig = False):
   """Helper function to organize results.
   When run in a notebook, outputs a matplotlib bar plot of the
   TCAV scores for all bottlenecks for each concept, replacing the
@@ -126,25 +126,6 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
           print('>>> Number of TCAV random observations <<<\n', len(random_i_ups[bottleneck]))
           count = 1
 
-
-        # Plot histogram 
-        """
-        if plot_hist:
-          plt.figure()
-          plt.hist(i_ups, 25,density=True, range = (0,1),facecolor='g', alpha=0.75, label = concept)
-          plt.hist(random_i_ups[bottleneck], 25,density=True,range = (0,1), facecolor='r', alpha=0.75, label='random')
-          plt.legend(loc='upper right')
-          plt.title(f'Histogram of {concept} (concept)\nin {bottleneck} (bottleneck)')
-          plt.ylabel('Density = True')
-          plt.xlabel('TCAV value')
-
-          #plt.figure()
-          #sns.histplot(i_ups, stat = 'percent', binrange = (0,1), color = 'g')#, common_norm=False)
-          #sns.histplot(random_i_ups[bottleneck], stat = 'percent', binrange = (0,1), color = 'r')
-          #plt.xlabel('TCAV value')
-          #plt.show()
-        """
-
         if bottleneck not in plot_data:
           plot_data[bottleneck] = {'bn_vals': [], 'bn_stds': [], 'significant': []}
 
@@ -167,37 +148,43 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
             "not significant" if p_val > min_p_val else "significant"))
         """
   # histogram plots
-  palette ={"dotted": "darkblue", "striped": "darkorange", "zigzagged": "g", "random": "grey"}
-  for bottlenecks in df_result['Bottleneck'].unique():
-    data = df_result[df_result['Bottleneck'] == bottlenecks]
+  if plot_hist:
 
-    #plt.figure(figsize=(15,4));
+    palette ={"dotted": "darkblue", "striped": "darkorange", "zigzagged": "g", "random": "grey"}
     
-    plt.subplots(nrows=1, ncols=3, sharey=True,figsize=(15,4));
-    plt.suptitle(f'Histogram of TCAV-scores for each concept in {bottlenecks}');
-    plt.subplot(1, 3, 1);
-    ax = sns.histplot(data=data[data['Concept'].isin(['dotted','random'])], x="TCAV score", hue="Concept",
-    hue_order = ['dotted','random'],stat = 'percent', binrange = (0,1),common_norm=False, bins = 20, element="step", palette=palette);
-    sns.move_legend( ax, loc = "upper left");
-    plt.axvline(0.5, 0,10, ls = '--', lw = 0.8, color = 'grey');
-    
-    plt.subplot(1, 3, 2);
-    ax = sns.histplot(data=data[data['Concept'].isin(['striped','random'])], x="TCAV score", hue_order = ['striped','random'],
-    hue="Concept", stat = 'percent', binrange = (0,1),common_norm=False, bins = 20, element="step", palette=palette);
-    sns.move_legend( ax, loc = "upper left");
-    plt.axvline(0.5, 0,10, ls = '--', lw = 0.8, color = 'grey');
-    
-    plt.subplot(1, 3, 3);
-    ax = sns.histplot(data=data[data['Concept'].isin(['zigzagged','random'])], x="TCAV score", hue_order =['zigzagged','random'],
-    hue="Concept", stat = 'percent', binrange = (0,1),common_norm=False, bins = 20, element="step", palette=palette);
-    sns.move_legend( ax, loc = "upper left");
-    plt.axvline(0.5, 0,10, ls = '--', lw = 0.8, color = 'grey');
+    for bottlenecks in df_result['Bottleneck'].unique():
+      data = df_result[df_result['Bottleneck'] == bottlenecks]
+      # set figure
+      plt.subplots(nrows=1, ncols=3, sharey=True,figsize=(15,4));
+      plt.suptitle(f'Histogram of TCAV-scores for each concept in {bottlenecks}');
+      
+      # first concept
+      plt.subplot(1, 3, 1);
+      ax = sns.histplot(data=data[data['Concept'].isin(['dotted','random'])], x="TCAV score", hue="Concept",
+      hue_order = ['dotted','random'],stat = 'percent', binrange = (0,1),common_norm=False, bins = 20, element="step", palette=palette);
+      sns.move_legend( ax, loc = "upper left");
+      plt.axvline(0.5, 0,10, ls = '--', lw = 0.8, color = 'grey');
+      # 2nd
+      plt.subplot(1, 3, 2);
+      ax = sns.histplot(data=data[data['Concept'].isin(['striped','random'])], x="TCAV score", hue_order = ['striped','random'],
+      hue="Concept", stat = 'percent', binrange = (0,1),common_norm=False, bins = 20, element="step", palette=palette);
+      sns.move_legend( ax, loc = "upper left");
+      plt.axvline(0.5, 0,10, ls = '--', lw = 0.8, color = 'grey');
+      # 3rd
+      plt.subplot(1, 3, 3);
+      ax = sns.histplot(data=data[data['Concept'].isin(['zigzagged','random'])], x="TCAV score", hue_order =['zigzagged','random'],
+      hue="Concept", stat = 'percent', binrange = (0,1),common_norm=False, bins = 20, element="step", palette=palette);
+      sns.move_legend( ax, loc = "upper left");
+      plt.axvline(0.5, 0,10, ls = '--', lw = 0.8, color = 'grey');
 
-    plt.tight_layout();
-    plt.savefig(f'SavedResults/imagenet_tcav_results/histogram_{results[0]["target_class"]}_{bottlenecks}.pdf')
-    plt.show();
-    
-    
+      # finish figure
+      plt.tight_layout();
+      if save_fig:
+        print('Now overwritting and saving figure')
+        plt.savefig(f'SavedResults/imagenet_tcav_results/histogram_{results[0]["target_class"]}_{bottlenecks}.pdf')
+      plt.show();
+      
+      
   # subtract number of random experiments
   if random_counterpart:
     num_concepts = len(result_summary) - 1
@@ -221,7 +208,7 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
   for i, [bn, vals] in enumerate(plot_data.items()):
 
     bar = ax.bar(index + i * bar_width, vals['bn_vals'],
-        bar_width, yerr=vals['bn_stds'], label=bn)
+        bar_width, yerr=vals['bn_stds'],ecolor = 'grey', label=bn, color = sns.color_palette("Paired")[i])
     
     # draw stars to mark bars that are stastically insignificant to 
     # show them as different from others
