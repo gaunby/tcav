@@ -46,6 +46,7 @@ import os
 import shutil
 import PIL
 from PIL import Image
+from torch import t
 import tensorflow as tf
 import socket
 import random
@@ -98,30 +99,30 @@ Filters away images that are corrupted or smaller than 10KB
   Raises:
     Exception: Propagated from PIL.image.verify()
 """
-def download_image(path, url):
+def download_image(path, url, num_downloaded):
   image_name = url.split("/")[-1]
   image_name = image_name.split("?")[0]
   image_prefix = image_name.split(".")[0]
+
+  # make sure not to overwrite the images (thus, naming is extended by number_downloaded) 
+  image_prefix = image_prefix + str(num_downloaded)
   saving_path = os.path.join(path, image_prefix + ".jpg")
-  
+
   try:
     with time_limit(5):
       # Throw an exception if
       urllib.request.urlretrieve(url, saving_path)
+      
   except TimeoutException as e:
     A=0
-
 
   try:
     # Throw an exception if the image is unreadable or corrupted
     Image.open(saving_path).verify()
 
     # Remove images smaller than 10kb, to make sure we are not downloading empty/low quality images
-
-    
     if tf.io.gfile.stat(saving_path).length < kMinFileSize:
       tf.io.gfile.remove(saving_path)
-      print("The file has been removed!")
 
   # PIL.Image.verify() throws a default exception if it finds a corrupted image.
   except Exception as e:
@@ -129,8 +130,6 @@ def download_image(path, url):
         saving_path
     )  # We need to delete it, since urllib automatically saves them.
     raise e
-    
-
 
 """ For a imagenet label, fetches all URLs that contain this image, from the main URL contained in the dataframe
 
@@ -187,25 +186,26 @@ def fetch_imagenet_class(path, class_name, number_of_images, imagenet_dataframe)
     )
   # To speed up imagenet download, we timeout image downloads at 5 seconds.
   socket.setdefaulttimeout(5)
-
   tf.compat.v1.logging.info("Fetching imagenet data for " + class_name)
   concept_path = os.path.join(path, class_name)
   tf.io.gfile.makedirs(concept_path)
   tf.compat.v1.logging.info("Saving images at " + concept_path)
-
+  
   # Check to see if this class name exists. Fetch all urls if so.
   all_images = fetch_all_urls_for_concept(imagenet_dataframe, class_name)
-
   # Fetch number_of_images images or as many as you can.
   num_downloaded = 0
   for image_url in all_images:
     if "flickr" not in image_url:
       try:
-        download_image(concept_path, image_url)
+        download_image(concept_path, image_url, num_downloaded)
+
         image_name = image_url.split("/")[-1]
         image_name = image_name.split("?")[0]
         image_prefix = image_name.split(".")[0]
+        image_prefix = image_prefix + str(num_downloaded)
         saving_path = os.path.join(concept_path, image_prefix + ".jpg")
+
         if os.path.exists(saving_path):
           num_downloaded += 1
 
@@ -305,7 +305,7 @@ def generate_random_folders(working_directory, random_folder_prefix,
                             number_of_random_folders,
                             number_of_examples_per_folder, imagenet_dataframe):
   imagenet_concepts = imagenet_dataframe["class_name"].values.tolist()
-  for partition_number in range(401,number_of_random_folders):
+  for partition_number in range(0,number_of_random_folders):
     partition_name = random_folder_prefix + str(partition_number)
     partition_folder_path = os.path.join(working_directory, partition_name)
     print("Folder path: " + partition_folder_path)
@@ -314,7 +314,6 @@ def generate_random_folders(working_directory, random_folder_prefix,
     # Select a random concept
     examples_selected = 0
     while examples_selected < number_of_examples_per_folder:
-      print("We are at: " + str(examples_selected))
       random_concept = random.choice(imagenet_concepts)
       urls = fetch_all_urls_for_concept(imagenet_dataframe, random_concept)
 
@@ -322,10 +321,11 @@ def generate_random_folders(working_directory, random_folder_prefix,
         # We are filtering out images from Flickr urls, since several of those were removed
         if "flickr" not in url:
           try:
-            download_image(partition_folder_path, url)
+            download_image(partition_folder_path, url, examples_selected)
             image_name = url.split("/")[-1]
             image_name = image_name.split("?")[0]
             image_prefix = image_name.split(".")[0]
+            image_prefix = image_prefix + str(examples_selected)
             saving_path = os.path.join(partition_folder_path, image_prefix + ".jpg")
             if os.path.exists(saving_path):
               examples_selected += 1
