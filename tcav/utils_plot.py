@@ -120,6 +120,7 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
           _, p_val = ttest_ind(random_i_ups[bottleneck], i_ups, alternative = alternative)
         else:
           _, p_val = ttest_1samp(i_ups, t_test_mean,  alternative = alternative)
+          _, p_val_random = ttest_1samp(random_i_ups[bottleneck], t_test_mean,  alternative = alternative)
         
         if count == 0:
           print('>>> Number of TCAV concept observations <<<\n', len(i_ups))
@@ -127,7 +128,13 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
           count = 1
 
         if bottleneck not in plot_data:
-          plot_data[bottleneck] = {'bn_vals': [], 'bn_stds': [], 'significant': [], 'p-value': [], 'concept':[]}
+          plot_data[bottleneck] = {'random_p-value':[], 'bn_vals': [], 'bn_stds': [], 'significant': [], 'p-value': [], 'concept':[]}
+          plot_data[bottleneck]['random_p-value'].append(p_val_random)
+          plot_data[bottleneck]['random_p-value'].append(np.std(i_ups))
+          if p_val_random > min_p_val:
+            plot_data[bottleneck]['random_p-value'].append('in-significant')
+          else:
+            plot_data[bottleneck]['random_p-value'].append('significant')
 
         if p_val > min_p_val:
           # statistically insignificant
@@ -206,7 +213,7 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
   index = np.arange(num_concepts) * bar_width * (num_bottlenecks + 1)
 
   # matplotlib
-  fig, ax = plt.subplots()
+  fig, ax = plt.subplots(figsize = (10,5))
   # draw all bottlenecks individually
   for i, [bn, vals] in enumerate(plot_data.items()):
     bar = ax.bar(index + i * bar_width, vals['bn_vals'],
@@ -225,6 +232,9 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
   ax.set_xticklabels(plot_concepts)
   ax.legend()
   fig.tight_layout()
+  if save_fig:
+    print('Now overwritting and saving figure')
+    plt.savefig(f'SavedResults/imagenet_tcav_results/barplot_{results[0]["target_class"]}_bonferroni_{bonferroni_nr}.pdf')
 
   # ct stores current time
   # ct = datetime.datetime.now()
