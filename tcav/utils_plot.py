@@ -120,25 +120,30 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
           _, p_val = ttest_ind(random_i_ups[bottleneck], i_ups, alternative = alternative)
         else:
           _, p_val = ttest_1samp(i_ups, t_test_mean,  alternative = alternative)
-
+        
         if count == 0:
           print('>>> Number of TCAV concept observations <<<\n', len(i_ups))
           print('>>> Number of TCAV random observations <<<\n', len(random_i_ups[bottleneck]))
           count = 1
 
         if bottleneck not in plot_data:
-          plot_data[bottleneck] = {'bn_vals': [], 'bn_stds': [], 'significant': []}
+          plot_data[bottleneck] = {'bn_vals': [], 'bn_stds': [], 'significant': [], 'p-value': [], 'concept':[]}
 
         if p_val > min_p_val:
           # statistically insignificant
           plot_data[bottleneck]['bn_vals'].append(0.01)
           plot_data[bottleneck]['bn_stds'].append(0)
           plot_data[bottleneck]['significant'].append(False)
+          plot_data[bottleneck]['p-value'].append(p_val)
+          plot_data[bottleneck]['concept'].append(concept)
             
         else:
           plot_data[bottleneck]['bn_vals'].append(np.mean(i_ups))
           plot_data[bottleneck]['bn_stds'].append(np.std(i_ups))
           plot_data[bottleneck]['significant'].append(True)
+          plot_data[bottleneck]['p-value'].append(p_val)
+          plot_data[bottleneck]['concept'].append(concept)
+
         """
         print(3 * " ", "Bottleneck =", ("%s. TCAV Score = %.2f (+- %.2f), "
             "random was %.2f (+- %.2f). p-val = %.3f (%s)") % (
@@ -202,14 +207,10 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
 
   # matplotlib
   fig, ax = plt.subplots()
-  
   # draw all bottlenecks individually
-
   for i, [bn, vals] in enumerate(plot_data.items()):
-
     bar = ax.bar(index + i * bar_width, vals['bn_vals'],
         bar_width, yerr=vals['bn_stds'],ecolor = 'grey', label=bn, color = sns.color_palette("Paired")[i])
-    
     # draw stars to mark bars that are stastically insignificant to 
     # show them as different from others
     for j, significant in enumerate(vals['significant']):
@@ -217,9 +218,6 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
         ax.text(index[j] + i * bar_width - 0.1, 0.01, "*",
             fontdict = {'weight': 'bold', 'size': 16,
             'color': bar.patches[0].get_facecolor()})
-
-  # print (plot_data)
-
   # set properties
   ax.set_title('TCAV Scores for each concept and bottleneck')
   ax.set_ylabel('TCAV Score')
@@ -231,3 +229,6 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
   # ct stores current time
   # ct = datetime.datetime.now()
   # plt.savefig(f'SavedResults/results_{ct}.png')
+
+  return plot_data
+
