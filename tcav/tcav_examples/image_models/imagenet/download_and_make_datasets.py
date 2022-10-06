@@ -47,16 +47,14 @@ def make_concepts_targets_and_randoms(source_dir, number_of_images_per_folder, n
         print("broden1_224")
         subprocess.call(['bash' , 'FetchDataAndModels.sh', source_dir])
 
-    
     # Determine classes that we will fetch
     imagenet_classes = ['zebra']
     broden_concepts = ['dotted', 'zigzagged', 'striped']
     
-
     # make targets from imagenet
     imagenet_dataframe = fetcher.make_imagenet_dataframe("./imagenet_url_map.csv")
     
-    ''''
+   
     for image in imagenet_classes:
         fetcher.fetch_imagenet_class(source_dir, image, number_of_images_per_folder, imagenet_dataframe)
     
@@ -66,7 +64,6 @@ def make_concepts_targets_and_randoms(source_dir, number_of_images_per_folder, n
                                                    saving_path=source_dir,
                                                    texture_name=concept,
                                                    number_of_images=number_of_images_per_folder)
-    '''''
     
     # Make random folders. If we want to run N random experiments with tcav, we need N+1 folders.
     fetcher.generate_random_folders(
@@ -76,9 +73,6 @@ def make_concepts_targets_and_randoms(source_dir, number_of_images_per_folder, n
         number_of_examples_per_folder=number_of_images_per_folder,
         imagenet_dataframe=imagenet_dataframe
     )
-
-
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Create examples and concepts folders.')

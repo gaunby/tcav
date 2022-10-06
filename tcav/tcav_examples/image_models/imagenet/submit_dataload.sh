@@ -2,7 +2,7 @@
 #!/bin/sh
 ### General options
 ### -- specify queue --
-#BSUB -q gpuv100
+#BSUB -q gpua100
 ### -- set the job Name --
 #BSUB -J GenerateImageNet_Data
 ### -- ask for number of cores (default: 1) --
@@ -15,7 +15,7 @@
 ### -- specify that we want the job to get killed if it exceeds 3 GB per core/slot --
 #BSUB -M 32GB
 ### -- set walltime limit: hh:mm --
-#BSUB -W 24:00
+#BSUB -W 72:00
 ### -- set the email address --
 #BSUB -u s174498@student.dtu.dk
 # please uncomment the following line and put in your e-mail address,
@@ -32,4 +32,4 @@
 # here follow the commands you want to execute
 source ~/miniconda3/bin/activate
 conda activate TCAV_env
-python download_and_make_datasets.py --source_dir=/work3/s174498/ImageNet_Data_excludesmallfiles --number_of_images_per_folder=120 --number_of_random_folders=500
+python download_and_make_datasets.py --source_dir=/work3/s174498/ImageNet_fulldataset --number_of_images_per_folder=120 --number_of_random_folders=5
