@@ -129,12 +129,13 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
 
         if bottleneck not in plot_data:
           plot_data[bottleneck] = {'random_p-value':[], 'bn_vals': [], 'bn_stds': [], 'significant': [], 'p-value': [], 'concept':[]}
+          plot_data[bottleneck]['random_p-value'].append(np.mean(random_i_ups[bottleneck]))
+          plot_data[bottleneck]['random_p-value'].append(np.std(random_i_ups[bottleneck]))
           plot_data[bottleneck]['random_p-value'].append(p_val_random)
-          plot_data[bottleneck]['random_p-value'].append(np.std(i_ups))
           if p_val_random > min_p_val:
-            plot_data[bottleneck]['random_p-value'].append('in-significant')
+            plot_data[bottleneck]['random_p-value'].append('False')
           else:
-            plot_data[bottleneck]['random_p-value'].append('significant')
+            plot_data[bottleneck]['random_p-value'].append('True')
 
         if p_val > min_p_val:
           # statistically insignificant
