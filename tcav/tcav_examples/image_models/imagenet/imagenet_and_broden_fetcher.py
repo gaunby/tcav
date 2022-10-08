@@ -105,7 +105,7 @@ def download_image(path, url, num_downloaded):
   image_prefix = image_name.split(".")[0]
 
   # make sure not to overwrite the images (thus, naming is extended by number_downloaded) 
-  image_prefix = image_prefix + str(num_downloaded)
+  image_prefix = str(num_downloaded) + "_" + image_prefix
   saving_path = os.path.join(path, image_prefix + ".jpg")
 
   try:
@@ -203,7 +203,7 @@ def fetch_imagenet_class(path, class_name, number_of_images, imagenet_dataframe)
         image_name = image_url.split("/")[-1]
         image_name = image_name.split("?")[0]
         image_prefix = image_name.split(".")[0]
-        image_prefix = image_prefix + str(num_downloaded)
+        image_prefix = str(num_downloaded) + "_" + image_prefix
         saving_path = os.path.join(concept_path, image_prefix + ".jpg")
 
         if os.path.exists(saving_path):
@@ -213,6 +213,8 @@ def fetch_imagenet_class(path, class_name, number_of_images, imagenet_dataframe)
         tf.compat.v1.logging.info("Problem downloading imagenet image. Exception was " +
                         str(e) + " for URL " + image_url)
     if num_downloaded >= number_of_images:
+      print("We break!")
+      print(num_downloaded)
       break
 
   # If we reached the end, notify the user through the console.
@@ -305,7 +307,7 @@ def generate_random_folders(working_directory, random_folder_prefix,
                             number_of_random_folders,
                             number_of_examples_per_folder, imagenet_dataframe):
   imagenet_concepts = imagenet_dataframe["class_name"].values.tolist()
-  for partition_number in range(0,number_of_random_folders):
+  for partition_number in range(479,number_of_random_folders):
     partition_name = random_folder_prefix + str(partition_number)
     partition_folder_path = os.path.join(working_directory, partition_name)
     print("Folder path: " + partition_folder_path)
@@ -325,7 +327,7 @@ def generate_random_folders(working_directory, random_folder_prefix,
             image_name = url.split("/")[-1]
             image_name = image_name.split("?")[0]
             image_prefix = image_name.split(".")[0]
-            image_prefix = image_prefix + str(examples_selected)
+            image_prefix = str(examples_selected) + "_" + image_prefix
             saving_path = os.path.join(partition_folder_path, image_prefix + ".jpg")
             if os.path.exists(saving_path):
               examples_selected += 1
