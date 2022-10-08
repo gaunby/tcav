@@ -22,7 +22,7 @@ import tensorflow as tf
 model_to_run = 'GoogleNet'  
 user = 'mariafogh'
 # the name of the parent directory that results are stored (only if you want to cache)
-project_name = 'tcav_class_test'
+project_name = 'tcav_class_fulldataset'
 working_dir = "/work3/s174498/SaveCavsActivations/" + user + '/' + project_name
 # where activations are stored (only if your act_gen_wrapper does so)
 activation_dir =  working_dir+ '/activations/'
@@ -31,12 +31,9 @@ activation_dir =  working_dir+ '/activations/'
 cav_dir = working_dir + '/cavs/'
 # where the images live.
 
-source_dir = '/work3/s174498/ImageNet_Data'
-# bottlenecks = ['mixed3a', 'mixed3b', 'mixed4a', 'mixed4b', 'mixed4c', 'mixed4d', 'mixed4e', 'mixed5a', 'mixed5b', 'logit']  # @param 
+source_dir = '/work3/s174498/ImageNet_Data_excludesmallfiles'
+bottlenecks = ['mixed3a', 'mixed3b', 'mixed4a', 'mixed4b', 'mixed4c', 'mixed4d', 'mixed4e', 'mixed5a', 'mixed5b']  # @param 
 # bottlenecks = ['mixed4c', 'mixed4d']  # @param 
-bottlenecks = ['logit']  # @param 
-# bottlenecks = ['mixed3a']
-
 
 utils.make_dir_if_not_exists(activation_dir)
 utils.make_dir_if_not_exists(working_dir)
@@ -46,8 +43,8 @@ utils.make_dir_if_not_exists(cav_dir)
 alphas = [0.1]   
 
 target = 'zebra'  
-concepts = ["dotted","striped","zigzagged"] 
-
+#concepts = ["dotted","striped","zigzagged"] 
+concepts = ["zigzagged","striped","dotted"] 
 
 # Step 2: Model wrapper
 
@@ -78,8 +75,8 @@ act_generator = act_gen.ImageActivationGenerator(mymodel, source_dir, activation
 import absl
 absl.logging.set_verbosity(0)
 start_num_random_exp = 0
-num_random_exp = 50
-num_random_concepts_to_pick = 5
+num_random_exp = 500
+num_random_concepts_to_pick = 10
 
 ## only running num_random_exp = 10 to save some time. The paper number are reported for 500 random runs. 
 mytcav = tcav.TCAV(sess,
