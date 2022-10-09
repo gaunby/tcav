@@ -54,7 +54,7 @@ def make_concepts_targets_and_randoms(source_dir, number_of_images_per_folder, n
     # make targets from imagenet
     imagenet_dataframe = fetcher.make_imagenet_dataframe("./imagenet_url_map.csv")
     
-   
+    '''''
     for image in imagenet_classes:
         fetcher.fetch_imagenet_class(source_dir, image, number_of_images_per_folder, imagenet_dataframe)
     
@@ -64,6 +64,7 @@ def make_concepts_targets_and_randoms(source_dir, number_of_images_per_folder, n
                                                    saving_path=source_dir,
                                                    texture_name=concept,
                                                    number_of_images=number_of_images_per_folder)
+    '''''
     
     # Make random folders. If we want to run N random experiments with tcav, we need N+1 folders.
     fetcher.generate_random_folders(

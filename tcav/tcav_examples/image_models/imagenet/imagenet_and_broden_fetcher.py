@@ -307,7 +307,7 @@ def generate_random_folders(working_directory, random_folder_prefix,
                             number_of_random_folders,
                             number_of_examples_per_folder, imagenet_dataframe):
   imagenet_concepts = imagenet_dataframe["class_name"].values.tolist()
-  for partition_number in range(479,number_of_random_folders):
+  for partition_number in range(501,number_of_random_folders):
     partition_name = random_folder_prefix + str(partition_number)
     partition_folder_path = os.path.join(working_directory, partition_name)
     print("Folder path: " + partition_folder_path)

@@ -22,7 +22,7 @@ import tensorflow as tf
 model_to_run = 'GoogleNet'  
 user = 'mariafogh'
 # the name of the parent directory that results are stored (only if you want to cache)
-project_name = 'tcav_class_fulldataset'
+project_name = 'tcav_class_excludesmallfiles'
 working_dir = "/work3/s174498/SaveCavsActivations/" + user + '/' + project_name
 # where activations are stored (only if your act_gen_wrapper does so)
 activation_dir =  working_dir+ '/activations/'

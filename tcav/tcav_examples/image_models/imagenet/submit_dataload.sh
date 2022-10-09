@@ -32,4 +32,4 @@
 # here follow the commands you want to execute
 source ~/miniconda3/bin/activate
 conda activate TCAV_env
-python download_and_make_datasets.py --source_dir=/work3/s174498/ImageNet_fulldataset --number_of_images_per_folder=120 --number_of_random_folders=5
+python download_and_make_datasets.py --source_dir=/work3/s174498/ImageNet_Data_class_2 --number_of_images_per_folder=120 --number_of_random_folders=504
