@@ -41,6 +41,7 @@ utils.make_dir_if_not_exists(cav_dir)
 
 # this is a regularizer penalty parameter for linear classifier to get CAVs. 
 alphas = [0.1]   
+model_type = 'logistic' 
 
 target = 'zebra'  
 #concepts = ["dotted","striped","zigzagged"] 
@@ -85,6 +86,7 @@ mytcav = tcav.TCAV(sess,
                    bottlenecks,
                    act_generator,
                    alphas,
+                   model_type,
                    cav_dir=cav_dir,
                    num_random_exp=num_random_exp,
                    start_num_random_exp = start_num_random_exp,
