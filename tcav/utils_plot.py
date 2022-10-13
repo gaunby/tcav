@@ -184,29 +184,29 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
       data = df_result[df_result['Bottleneck'] == bottlenecks]
       # set figure
       plt.subplots(nrows=1, ncols=3, sharey=True,figsize=(15,4));
-      plt.suptitle(f'Histogram of TCAV-scores for each concept in {bottlenecks}', fontproperties = font_title);
+      plt.suptitle(f'Histogram of TCAV scores for each concept in {bottlenecks}', fontsize =20);
       
       # first concept
       plt.subplot(1, 3, 1);
       ax = sns.histplot(data=data[data['Concept'].isin(['zigzagged','random'])], x="TCAV score", hue_order =['zigzagged','random'],
       hue="Concept", stat = 'percent', binrange = (0,1),common_norm=False, bins = 20, element="step", palette=palette);
-      sns.move_legend( ax, loc = "upper left");
-      ax.set_xlabel("TCAV score",fontproperties =  font_axis);
-      ax.set_ylabel("Percent",fontproperties =  font_axis);
+      sns.move_legend( ax, loc = "upper left", fontsize = 'x-large');
+      ax.set_xlabel("TCAV score",fontsize = 'xx-large');
+      ax.set_ylabel("Percent",fontsize =  'xx-large');
       plt.axvline(0.5, 0,10, ls = '--', lw = 0.8, color = 'grey');
       # 2nd
       plt.subplot(1, 3, 2);
       ax = sns.histplot(data=data[data['Concept'].isin(['striped','random'])], x="TCAV score", hue_order = ['striped','random'],
       hue="Concept", stat = 'percent', binrange = (0,1),common_norm=False, bins = 20, element="step", palette=palette);
-      sns.move_legend( ax, loc = "upper left");
-      ax.set_xlabel("TCAV score",fontproperties =  font_axis);
+      sns.move_legend( ax, loc = "upper left",fontsize = 'x-large');
+      ax.set_xlabel("TCAV score",fontsize = 'xx-large');
       plt.axvline(0.5, 0,10, ls = '--', lw = 0.8, color = 'grey');
       # 3rd
       plt.subplot(1, 3, 3);
       ax = sns.histplot(data=data[data['Concept'].isin(['dotted','random'])], x="TCAV score", hue="Concept",
       hue_order = ['dotted','random'],stat = 'percent', binrange = (0,1),common_norm=False, bins = 20, element="step", palette=palette);
-      sns.move_legend( ax, loc = "upper left");
-      ax.set_xlabel("TCAV score",fontproperties =  font_axis);
+      sns.move_legend( ax, loc = "upper left", fontsize = 'x-large');
+      ax.set_xlabel("TCAV score",fontsize = 'xx-large');
       plt.axvline(0.5, 0,10, ls = '--', lw = 0.8, color = 'grey');
       
       # finish figure
@@ -234,7 +234,7 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
 
   # matplotlib
   
-  fig, ax = plt.subplots(figsize = (10,5))
+  fig, ax = plt.subplots(figsize = (10,6))
   # draw all bottlenecks individually
   for i, [bn, vals] in enumerate(plot_data.items()):
     bar = ax.bar(index + i * bar_width, vals['bn_vals'],
@@ -247,11 +247,11 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
             fontdict = {'weight': 'bold', 'size': 16,
             'color': bar.patches[0].get_facecolor()})
   # set properties
-  ax.set_title('TCAV Scores for each concept and bottleneck', fontproperties = font_title)
-  ax.set_ylabel('TCAV Score', fontproperties = font_axis)
+  ax.set_title('TCAV Scores for each concept and bottleneck', fontsize = 20)
+  ax.set_ylabel('TCAV Score', fontsize = 'xx-large')
   ax.set_xticks(index + num_bottlenecks * bar_width / 2)
-  ax.set_xticklabels(plot_concepts, fontproperties = font_axis)
-  ax.legend()
+  ax.set_xticklabels(plot_concepts, fontsize = 'xx-large')#fontsize = 16)
+  ax.legend(fontsize = 'large')
   fig.tight_layout()
   if save_fig:
     print('Now overwritting and saving figure')

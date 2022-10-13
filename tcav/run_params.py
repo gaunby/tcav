@@ -29,6 +29,7 @@ class RunParams(object):
                activation_generator,
                cav_dir,
                alpha,
+               model_type,
                model,
                overwrite=True):
     """A simple class to take care of TCAV parameters.
@@ -49,6 +50,7 @@ class RunParams(object):
     self.activation_generator = activation_generator
     self.cav_dir = cav_dir
     self.alpha = alpha
+    self.model_type = model_type
     self.overwrite = overwrite
     self.model = model
 

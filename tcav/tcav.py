@@ -476,6 +476,7 @@ class TCAV(object):
                             self.activation_generator,
                             self.cav_dir,
                             alpha,
+                            self.model_type,
                             self.mymodel,
                         )
                     )

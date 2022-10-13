@@ -16,7 +16,7 @@
 ### -- set walltime limit: hh:mm --
 #BSUB -W 72:00
 ### -- set the email address --
-#BSUB -u s174498@student.dtu.dk
+#BSUB -u s174497@student.dtu.dk
 # please uncomment the following line and put in your e-mail address,
 # if you want to receive e-mail notifications on a non-default address
 ### -- send notification at start --

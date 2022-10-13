@@ -34,7 +34,7 @@ cav_dir = working_dir + '/cavs/'
 source_dir = '/work3/s174498/ImageNet_Data_excludesmallfiles'
 bottlenecks = ['mixed3a', 'mixed3b', 'mixed4a', 'mixed4b', 'mixed4c', 'mixed4d', 'mixed4e', 'mixed5a', 'mixed5b']  # @param 
 # bottlenecks = ['mixed4c', 'mixed4d']  # @param 
-
+#/zhome/94/5/127021/speciale/tcav/Run_TCAV.py
 utils.make_dir_if_not_exists(activation_dir)
 utils.make_dir_if_not_exists(working_dir)
 utils.make_dir_if_not_exists(cav_dir)
@@ -76,8 +76,8 @@ act_generator = act_gen.ImageActivationGenerator(mymodel, source_dir, activation
 import absl
 absl.logging.set_verbosity(0)
 start_num_random_exp = 0
-num_random_exp = 500
-num_random_concepts_to_pick = 10
+num_random_exp = 8
+num_random_concepts_to_pick = 3
 
 ## only running num_random_exp = 10 to save some time. The paper number are reported for 500 random runs. 
 mytcav = tcav.TCAV(sess,
@@ -99,7 +99,7 @@ results = mytcav.run(run_parallel=False, overwrite=True)
 #with open('results_pickle/4c4d_result_random500_' + str(start_num_random_exp) + '_to_' + str(end_num_random_exp) + '.pkl', 'wb') as handle:
     #pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-with open('results_pickle/results_'+str(project_name)+'_'+ str(target)+ '_' + str(num_random_exp) +'_' + str(num_random_concepts_to_pick) +'.pkl', 'wb') as handle:
+with open('/work3/s174498/TCAV_results/results_'+str(project_name)+'_'+str(model_type) +'_'+str(target)+ '_' + str(num_random_exp) +'_' + str(num_random_concepts_to_pick) +'.pkl', 'wb') as handle:
     pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 print ('done!')
