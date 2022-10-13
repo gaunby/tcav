@@ -133,6 +133,7 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
         # Calculate statistical significance
         if t_test_mean == None:
           _, p_val = ttest_ind(random_i_ups[bottleneck], i_ups, alternative = alternative)
+
         else:
           _, p_val = ttest_1samp(i_ups, t_test_mean,  alternative = alternative)
           _, p_val_random = ttest_1samp(random_i_ups[bottleneck], t_test_mean,  alternative = alternative)
@@ -146,11 +147,12 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
           plot_data[bottleneck] = {'random_p-value':[], 'bn_vals': [], 'bn_stds': [], 'significant': [], 'p-value': [], 'concept':[]}
           plot_data[bottleneck]['random_p-value'].append(np.mean(random_i_ups[bottleneck]))
           plot_data[bottleneck]['random_p-value'].append(np.std(random_i_ups[bottleneck]))
-          plot_data[bottleneck]['random_p-value'].append(p_val_random)
-          if p_val_random > min_p_val:
-            plot_data[bottleneck]['random_p-value'].append('False')
-          else:
-            plot_data[bottleneck]['random_p-value'].append('True')
+          if t_test_mean != None:  
+            plot_data[bottleneck]['random_p-value'].append(p_val_random)
+            if p_val_random > min_p_val:
+              plot_data[bottleneck]['random_p-value'].append('False')
+            else:
+              plot_data[bottleneck]['random_p-value'].append('True')
 
         if p_val > min_p_val:
           # statistically insignificant
