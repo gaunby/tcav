@@ -192,7 +192,8 @@ class CAV(object):
                 tol=self.hparams["tol"],
             )
         elif self.hparams["model_type"] == "logistic":
-            lm = linear_model.LogisticRegression()
+            lm = linear_model.LogisticRegression(max_iter=self.hparams["max_iter"],
+                tol=self.hparams["tol"])
         else:
             raise ValueError(
                 "Invalid hparams.model_type: {}".format(self.hparams["model_type"])
