@@ -76,8 +76,8 @@ act_generator = act_gen.ImageActivationGenerator(mymodel, source_dir, activation
 import absl
 absl.logging.set_verbosity(0)
 start_num_random_exp = 0
-num_random_exp = 8
-num_random_concepts_to_pick = 3
+num_random_exp = 500
+num_random_concepts_to_pick = 5
 
 ## only running num_random_exp = 10 to save some time. The paper number are reported for 500 random runs. 
 mytcav = tcav.TCAV(sess,
