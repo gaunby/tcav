@@ -45,6 +45,21 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
     plot_hist: to plot histograms of results 
     alternative: input to t-test 
   """
+  font_title = {#'family': 'serif',
+        #'color':  'darkgrey',
+        'weight': 'normal',
+        'size': 16,
+        }
+  font_axis = {#'family': 'serif',
+        #'color':  'darkgrey',
+        'weight': 'normal',
+        'size': 12,
+        }
+  font_leg = {#'family': 'serif',
+        'color':  'darkgrey',
+        'weight': 'normal',
+        'size': 8,
+        }
   # print('P-values:',min_p_val)
 
   # helper function, returns if this is a random concept
@@ -169,27 +184,31 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
       data = df_result[df_result['Bottleneck'] == bottlenecks]
       # set figure
       plt.subplots(nrows=1, ncols=3, sharey=True,figsize=(15,4));
-      plt.suptitle(f'Histogram of TCAV-scores for each concept in {bottlenecks}');
+      plt.suptitle(f'Histogram of TCAV-scores for each concept in {bottlenecks}', fontproperties = font_title);
       
       # first concept
       plt.subplot(1, 3, 1);
-      ax = sns.histplot(data=data[data['Concept'].isin(['dotted','random'])], x="TCAV score", hue="Concept",
-      hue_order = ['dotted','random'],stat = 'percent', binrange = (0,1),common_norm=False, bins = 20, element="step", palette=palette);
+      ax = sns.histplot(data=data[data['Concept'].isin(['zigzagged','random'])], x="TCAV score", hue_order =['zigzagged','random'],
+      hue="Concept", stat = 'percent', binrange = (0,1),common_norm=False, bins = 20, element="step", palette=palette);
       sns.move_legend( ax, loc = "upper left");
+      ax.set_xlabel("TCAV score",fontproperties =  font_axis);
+      ax.set_ylabel("Percent",fontproperties =  font_axis);
       plt.axvline(0.5, 0,10, ls = '--', lw = 0.8, color = 'grey');
       # 2nd
       plt.subplot(1, 3, 2);
       ax = sns.histplot(data=data[data['Concept'].isin(['striped','random'])], x="TCAV score", hue_order = ['striped','random'],
       hue="Concept", stat = 'percent', binrange = (0,1),common_norm=False, bins = 20, element="step", palette=palette);
       sns.move_legend( ax, loc = "upper left");
+      ax.set_xlabel("TCAV score",fontproperties =  font_axis);
       plt.axvline(0.5, 0,10, ls = '--', lw = 0.8, color = 'grey');
       # 3rd
       plt.subplot(1, 3, 3);
-      ax = sns.histplot(data=data[data['Concept'].isin(['zigzagged','random'])], x="TCAV score", hue_order =['zigzagged','random'],
-      hue="Concept", stat = 'percent', binrange = (0,1),common_norm=False, bins = 20, element="step", palette=palette);
+      ax = sns.histplot(data=data[data['Concept'].isin(['dotted','random'])], x="TCAV score", hue="Concept",
+      hue_order = ['dotted','random'],stat = 'percent', binrange = (0,1),common_norm=False, bins = 20, element="step", palette=palette);
       sns.move_legend( ax, loc = "upper left");
+      ax.set_xlabel("TCAV score",fontproperties =  font_axis);
       plt.axvline(0.5, 0,10, ls = '--', lw = 0.8, color = 'grey');
-
+      
       # finish figure
       plt.tight_layout();
       if save_fig:
@@ -214,6 +233,7 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
   index = np.arange(num_concepts) * bar_width * (num_bottlenecks + 1)
 
   # matplotlib
+  
   fig, ax = plt.subplots(figsize = (10,5))
   # draw all bottlenecks individually
   for i, [bn, vals] in enumerate(plot_data.items()):
@@ -227,10 +247,10 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
             fontdict = {'weight': 'bold', 'size': 16,
             'color': bar.patches[0].get_facecolor()})
   # set properties
-  ax.set_title('TCAV Scores for each concept and bottleneck')
-  ax.set_ylabel('TCAV Score')
+  ax.set_title('TCAV Scores for each concept and bottleneck', fontproperties = font_title)
+  ax.set_ylabel('TCAV Score', fontproperties = font_axis)
   ax.set_xticks(index + num_bottlenecks * bar_width / 2)
-  ax.set_xticklabels(plot_concepts)
+  ax.set_xticklabels(plot_concepts, fontproperties = font_axis)
   ax.legend()
   fig.tight_layout()
   if save_fig:

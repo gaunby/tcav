@@ -97,7 +97,7 @@ results = mytcav.run(run_parallel=False, overwrite=True)
 #with open('results_pickle/4c4d_result_random500_' + str(start_num_random_exp) + '_to_' + str(end_num_random_exp) + '.pkl', 'wb') as handle:
     #pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-with open('results_pickle/results_'+ str(target)+ '_' + str(num_random_exp) +'_' + str(num_random_concepts_to_pick) +'.pkl', 'wb') as handle:
+with open('results_pickle/results_'+str(project_name)+'_'+ str(target)+ '_' + str(num_random_exp) +'_' + str(num_random_concepts_to_pick) +'.pkl', 'wb') as handle:
     pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 print ('done!')
