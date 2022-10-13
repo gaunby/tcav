@@ -155,6 +155,7 @@ class TCAV(object):
         bottlenecks,
         activation_generator,
         alphas,
+        model_type,
         random_counterpart=None,
         cav_dir=None,
         num_random_exp=5,
@@ -189,6 +190,7 @@ class TCAV(object):
         self.activation_generator = activation_generator
         self.cav_dir = cav_dir
         self.alphas = alphas
+        self.model_type = model_type
         self.mymodel = activation_generator.get_model()
         self.model_to_run = self.mymodel.model_name
         self.sess = sess
@@ -286,6 +288,7 @@ class TCAV(object):
         target_class = param.target_class
         activation_generator = param.activation_generator
         alpha = param.alpha
+        model_type = param.model_type
         mymodel = param.model
         cav_dir = param.cav_dir
         # first check if target class is in model.
@@ -299,6 +302,7 @@ class TCAV(object):
         # Get CAVs
         cav_hparams = CAV.default_hparams()
         cav_hparams["alpha"] = alpha
+        cav_hparams['model_type'] = model_type
         cav_instance = get_or_train_cav(
             concepts,
             bottleneck,
@@ -350,6 +354,7 @@ class TCAV(object):
             "val_directional_dirs": val_directional_dirs,
             "note": "alpha_%s " % (alpha),
             "alpha": alpha,
+            "model_type": model_type,
             "bottleneck": bottleneck,
         }
         del acts
