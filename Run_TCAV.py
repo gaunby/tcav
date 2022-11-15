@@ -77,7 +77,7 @@ import absl
 absl.logging.set_verbosity(0)
 start_num_random_exp = 0
 num_random_exp = 500
-num_random_concepts_to_pick = 5
+num_random_concepts_to_pick = 10
 
 ## only running num_random_exp = 10 to save some time. The paper number are reported for 500 random runs. 
 mytcav = tcav.TCAV(sess,
@@ -99,7 +99,7 @@ results = mytcav.run(run_parallel=False, overwrite=True)
 #with open('results_pickle/4c4d_result_random500_' + str(start_num_random_exp) + '_to_' + str(end_num_random_exp) + '.pkl', 'wb') as handle:
     #pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-with open('/work3/s174498/TCAV_results/results_'+str(project_name)+'_'+str(model_type) +'_'+str(target)+ '_' + str(num_random_exp) +'_' + str(num_random_concepts_to_pick) +'.pkl', 'wb') as handle:
+with open('/work3/s174498/TCAV_results/test_random_random_results_'+str(project_name)+'_'+str(model_type) +'_'+str(target)+ '_' + str(num_random_exp) +'_' + str(num_random_concepts_to_pick) +'.pkl', 'wb') as handle:
     pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 print ('done!')

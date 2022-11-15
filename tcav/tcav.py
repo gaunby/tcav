@@ -27,6 +27,8 @@ import numpy as np
 import time
 import tensorflow as tf
 
+import random
+
 
 class TCAV(object):
     """TCAV object: runs TCAV for one target and a set of concepts.
@@ -374,8 +376,11 @@ class TCAV(object):
                        to draw from. Optional, if not provided, the names will be
                        random500_{i} for i in num_random_exp.
         """
+        num_random = True
         if num_random_concepts_to_pick == 0:
             num_random_concepts_to_pick = start_num_random_exp+num_random_exp
+            num_random = False
+
 
         target_concept_pairs = [(self.target, self.concepts)]
 
@@ -406,21 +411,46 @@ class TCAV(object):
         if self.random_counterpart is None:
             # TODO random500_1 vs random500_0 is the same as 1 - (random500_0 vs random500_1)
             #for i in range(num_random_exp):
-            for i in range(start_num_random_exp, num_random_concepts_to_pick ):#start_num_random_exp+num_random_exp): 
-                (
-                    all_concepts_randoms_tmp,
-                    pairs_to_run_randoms_tmp,
-                ) = utils.process_what_to_run_expand(
-                    utils.process_what_to_run_randoms(
-                        target_concept_pairs, get_random_concept(i)
-                    ),
-                    num_random_exp = num_random_exp - 1,
-                    start_num_random_exp = start_num_random_exp,
-                    random_concepts=random_concepts,
-                )
+            if num_random:
+                random.seed(123)
+                random_list = list(range(0, 500))
+                random_sample = random.sample(random_list,num_random_concepts_to_pick)
+                print('>>> RANDOM SAMPLE <<<')
+                print(random_sample)
+                random_sample.sort()
+                print(random_sample)
+                for i in random_sample:
+                    (
+                        all_concepts_randoms_tmp,
+                        pairs_to_run_randoms_tmp,
+                    ) = utils.process_what_to_run_expand(
+                        utils.process_what_to_run_randoms(
+                            target_concept_pairs, get_random_concept(i)
+                        ),
+                        num_random_exp = num_random_exp - 1,
+                        start_num_random_exp = start_num_random_exp,
+                        random_concepts=random_concepts,
+                    )
 
-                pairs_to_run_randoms.extend(pairs_to_run_randoms_tmp)
-                all_concepts_randoms.extend(all_concepts_randoms_tmp)
+                    pairs_to_run_randoms.extend(pairs_to_run_randoms_tmp)
+                    all_concepts_randoms.extend(all_concepts_randoms_tmp)
+            
+            else:
+                for i in range(start_num_random_exp, num_random_concepts_to_pick ):#start_num_random_exp+num_random_exp): 
+                    (
+                        all_concepts_randoms_tmp,
+                        pairs_to_run_randoms_tmp,
+                    ) = utils.process_what_to_run_expand(
+                        utils.process_what_to_run_randoms(
+                            target_concept_pairs, get_random_concept(i)
+                        ),
+                        num_random_exp = num_random_exp - 1,
+                        start_num_random_exp = start_num_random_exp,
+                        random_concepts=random_concepts,
+                    )
+
+                    pairs_to_run_randoms.extend(pairs_to_run_randoms_tmp)
+                    all_concepts_randoms.extend(all_concepts_randoms_tmp)
 
         else:
             # run only random_counterpart as the positve set for random experiments

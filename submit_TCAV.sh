@@ -30,6 +30,6 @@
 ###
 # here follow the commands you want to execute
 source ~/miniconda3/bin/activate
-conda activate TCAV_env
-#conda activate tcav_env
+#conda activate TCAV_env
+conda activate tcav_env
 python Run_TCAV.py

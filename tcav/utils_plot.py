@@ -71,6 +71,7 @@ def plot_results(results, random_counterpart=None, random_concepts=None, num_ran
       return concept in random_concepts
 
     else:
+      print('>>> is random concept:', concept)
       return 'random500_' in concept
 
   # print class, it will be the same for all
